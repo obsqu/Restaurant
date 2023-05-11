@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.base.AutomationBase;
+import com.constants.AutomationConstants;
 import com.pages.HomePage;
 import com.pages.LoginPage;
 import com.pages.WaiterPage;
@@ -29,7 +30,7 @@ public class WaiterPageTest extends AutomationBase {
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property = new PropertyUtil();
 	Properties allProp;
-	
+
 	@BeforeMethod
 	public void preRun() throws IOException {
 		driver = getDriver();
@@ -41,7 +42,7 @@ public class WaiterPageTest extends AutomationBase {
 		watrpg = homepg.navigateToWaiterPage();
 	}
 
-	//@Test(priority = 1, enabled = true)
+	// @Test(priority = 1, enabled = true)
 	public void validateElementsonAddWaiter() {
 		watrpg.ClickOnAddWaiterButton();
 		watrpg.WaitForWaiter();
@@ -52,8 +53,9 @@ public class WaiterPageTest extends AutomationBase {
 		watrpg.ClickOnCloseWaiterButton();
 		soft.assertAll();
 	}
-	//@Test(priority = 2, enabled = true, dataProvider = "dataWaitersAdd", dataProviderClass = DataWaiter.class)
-	public void validateAddWaiterDatas(String name, String phone, String mail, String store)  {
+
+	 @Test(priority = 2, enabled = true, dataProvider = "dataWaitersAdd", dataProviderClass = DataWaiter.class,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateAddWaiterDatas(String name, String phone, String mail, String store) {
 		watrpg.ClickOnAddWaiterButton();
 		watrpg.clickOnWaitername();
 		watrpg.enterValueForWaiterName(name);
@@ -65,24 +67,23 @@ public class WaiterPageTest extends AutomationBase {
 		soft.assertEquals(watrpg.getWaiterNameFromSearchResult(), name, "Failure message : Waiter name not matched");
 		soft.assertEquals(watrpg.getWaiterPhoneNumberFromSearchResult(), phone,
 				"Failure message : Waiter phone not matched");
-		soft.assertEquals(watrpg.getWaiterEmailidFromSearchResult(), mail,
-				"Failure message : Waiter mail not matched");
+		soft.assertEquals(watrpg.getWaiterEmailidFromSearchResult(), mail, "Failure message : Waiter mail not matched");
 		soft.assertEquals(watrpg.getWaiterStoreFromSearchResult(), store, "Failure message : Waiter store not matched");
 		soft.assertAll();
 	}
 
-	//@Test(priority = 4, enabled = true)
-	public void validateDeleteWaiterData() {
-
-		watrpg.searchWaiterLink("shibina");
+	//@Test(priority = 4, enabled = true,dataProvider = "dataWaiterDelete",dataProviderClass = DataWaiter.class)
+	public void validateDeleteWaiterData(String dltnm) {
+		watrpg.searchWaiterLink(dltnm);
 		watrpg.clickDeleteWaiterDataButton();
-		watrpg.searchWaiterLink("shibina");
-		Assert.assertEquals(watrpg.getWaiterNameFromSearchResult(), "No matching records found",
+		watrpg.searchWaiterLink(dltnm);
+		Assert.assertEquals(watrpg.getWaiterNameFromSearchResult(), AutomationConstants.ErrorMessage,
 				"Failure message : Waiter name not matched");
 	}
 
-	@Test(priority = 3, enabled = true,dataProvider = "dataWaitersEdit", dataProviderClass = DataWaiter.class)
-	public void validateEditButtonForWaiterDetails(String namEdit,String name, String phone, String mail, String store) {
+	//@Test(priority = 3, enabled = true, dataProvider = "dataWaitersEdit", dataProviderClass = DataWaiter.class)
+	public void validateEditButtonForWaiterDetails(String namEdit, String name, String phone, String mail,
+			String store) {
 		watrpg.searchWaiterLink(namEdit);
 		watrpg.clickEditWaiterDataButton();
 		watrpg.enterValueForWaiterName(name);
@@ -94,8 +95,7 @@ public class WaiterPageTest extends AutomationBase {
 		soft.assertEquals(watrpg.getWaiterNameFromSearchResult(), name, "Failure message : Waiter name not matched");
 		soft.assertEquals(watrpg.getWaiterPhoneNumberFromSearchResult(), phone,
 				"Failure message : Waiter phone not matched");
-		soft.assertEquals(watrpg.getWaiterEmailidFromSearchResult(), mail,
-				"Failure message : Waiter mail not matched");
+		soft.assertEquals(watrpg.getWaiterEmailidFromSearchResult(), mail, "Failure message : Waiter mail not matched");
 		soft.assertEquals(watrpg.getWaiterStoreFromSearchResult(), store, "Failure message : Waiter store not matched");
 		soft.assertAll();
 	}

@@ -37,5 +37,15 @@ public class DataWaiter {
 		
 		return data;
 	}
+	@DataProvider
+	public Object[][] dataWaiterDelete(){
+		Object[][] delete= new Object[4][1];
+		delete[0][0]=excelutil.readStringData("Waiter", 2, 1);
+		delete[0][0]=excelutil.readStringData("Waiter", 3, 1);
+		delete[0][0]=excelutil.readStringData("Waiter", 4, 1);
+		delete[0][0]=excelutil.readStringData("Waiter", 5, 1);
+		return delete;
+		
+	}
 	
 }
