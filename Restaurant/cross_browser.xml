@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite  name="Suite" >
+  <test thread-count="6" name="Test" parallel="tests">
+  <parameter name="browserName" value="chrome"></parameter>
+    <classes>
+      <class name="com.test.StoreTestPage"/>
+      <class name="com.test.LoginPageTest"/>
+      <class name="com.test.WaiterPageTest"/>
+      <class name="com.test.HomePageTest"/>
+      <class name="com.test.ProductCategoryTestPage"/>
+      <class name="com.test.CustomerTestPage"/>
+      <class name="com.test.ExpenseCategoryTestPage"/>
+      <class name="com.test.ExpenseTestPage"/>
+      <class name="com.test.LogoutTestPage"/>
+      <class name="com.test.SupplierTestPage"/>
+      <class name="com.test.ProductPageTest"/>
+    </classes>
+  </test> <!-- Test -->
+  
+  <test thread-count="6" name="Test" parallel="tests">
+  <parameter name="browserName" value="edge"></parameter>
+    <classes>
+      <class name="com.test.StoreTestPage"/>
+      <class name="com.test.LoginPageTest"/>
+      <class name="com.test.WaiterPageTest"/>
+      <class name="com.test.HomePageTest"/>
+      <class name="com.test.ProductCategoryTestPage"/>
+      <class name="com.test.CustomerTestPage"/>
+      <class name="com.test.ExpenseCategoryTestPage"/>
+      <class name="com.test.ExpenseTestPage"/>
+      <class name="com.test.LogoutTestPage"/>
+      <class name="com.test.SupplierTestPage"/>
+      <class name="com.test.ProductPageTest"/>
+    </classes>
+  </test> <!-- Test -->
+  <test thread-count="6" name="Test" parallel="tests">
+  <parameter name="browserName" value="firefox"></parameter>
+    <classes>
+      <class name="com.test.StoreTestPage"/>
+      <class name="com.test.LoginPageTest"/>
+      <class name="com.test.WaiterPageTest"/>
+      <class name="com.test.HomePageTest"/>
+      <class name="com.test.ProductCategoryTestPage"/>
+      <class name="com.test.CustomerTestPage"/>
+      <class name="com.test.ExpenseCategoryTestPage"/>
+      <class name="com.test.ExpenseTestPage"/>
+      <class name="com.test.LogoutTestPage"/>
+      <class name="com.test.SupplierTestPage"/>
+      <class name="com.test.ProductPageTest"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

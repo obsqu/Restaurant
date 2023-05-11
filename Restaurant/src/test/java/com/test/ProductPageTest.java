@@ -14,11 +14,8 @@ import com.pages.HomePage;
 import com.pages.LoginPage;
 import com.pages.ProductPage;
 import com.utilities.BrowserUtils;
-import com.utilities.ExcelRead;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
-import com.utilities.WaitUtils;
-import com.utilities.WebElementUtils;
 
 public class ProductPageTest extends AutomationBase {
 

@@ -16,7 +16,6 @@ import com.constants.AutomationConstants;
 import com.pages.CustomerPage;
 import com.pages.HomePage;
 import com.pages.LoginPage;
-import com.utilities.ExcelRead;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
 public class CustomerTestPage extends AutomationBase {

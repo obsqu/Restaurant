@@ -1,7 +1,6 @@
 package com.test;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
@@ -15,11 +14,8 @@ import com.constants.AutomationConstants;
 import com.pages.HomePage;
 import com.pages.LoginPage;
 import com.pages.StorePage;
-import com.utilities.BrowserUtils;
-import com.utilities.ExcelRead;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
-import com.utilities.WaitUtils;
 
 public class StoreTestPage extends AutomationBase {
 
