@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.base.AutomationBase;
+import com.constants.AutomationConstants;
 import com.pages.CommonDatas;
 import com.pages.ExpenseCategoryPage;
 import com.pages.HomePage;
@@ -27,14 +28,10 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 	LoginPage loginpg;
 	HomePage homepg;
 	ExpenseCategoryPage expnsctgry;
-	BrowserUtils brwsrUtil = new BrowserUtils();
-	WebElementUtils elementutil = new WebElementUtils();
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property;
 	Properties allProp;
-	WaitUtils waitutil = new WaitUtils();
 	ExcelUtils excelutil;
-
 	@BeforeMethod
 	public void preRun() throws IOException {
 		driver = getDriver();
@@ -49,6 +46,7 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 	@Test(priority = 1, enabled = true)
 	public void ValidateTheMenuItemsDisplayedAddExpensePage() {
 		expnsctgry.ClickOnAddCategoryButton();
+		expnsctgry.waitForCategory();
 		boolean flagdt = expnsctgry.isCategoryNameDisplayed();
 		Assert.assertTrue(flagdt, "Fail: CategoryName field is not displayed");
 		expnsctgry.ClickOnCloseButton();
@@ -60,30 +58,29 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 		String expctgry = excelutil.readStringData("ExpenseCategory", 2, 1);
 		expnsctgry.enterValueForCategryName(expctgry);
 		expnsctgry.ClickOnSubmitCategoryValues();
-		brwsrUtil.refreshPage(driver);
 		expnsctgry.ClickOnSearchCategoryLink(expctgry);
 		Assert.assertEquals(expnsctgry.getCategryNameFromSearchResult(), expctgry,
 				"Failure message : category name not matched");
 	}
 	@Test(priority = 3, enabled = true)
 	public void validateEditButtonForCategoryDetails() throws IOException {
-		String expctgry = excelutil.readStringData("ExpenseCategory", 2, 1);
-		String expctgrynm2 = excelutil.readStringData("ExpenseCategory", 3,1);
-		expnsctgry.ClickOnSearchCategoryLink(expctgry);
+		String expctryEdit = excelutil.readStringData("ExpenseCategory", 2, 1);
+		String expctgry = excelutil.readStringData("ExpenseCategory", 3,1);
+		expnsctgry.ClickOnSearchCategoryLink(expctryEdit);
 		expnsctgry.ClickOnCategoryEditButton();
-		expnsctgry.enterValueForCategryName(expctgrynm2);
+		expnsctgry.enterValueForCategryName(expctgry);
 		expnsctgry.ClickOnSubmitEditButton();
-		brwsrUtil.refreshPage(driver);
-		expnsctgry.ClickOnSearchCategoryLink(expctgrynm2);
-		Assert.assertEquals(expnsctgry.getCategryNameFromSearchResult(), expctgrynm2,
+		expnsctgry.ClickOnSearchCategoryLink(expctgry);
+		Assert.assertEquals(expnsctgry.getCategryNameFromSearchResult(), expctgry,
 				"Failure message : category name not matched");
 	}
 	@Test(priority = 4, enabled = true)
 	public void validateDeleteWaiterData() {
-		expnsctgry.ClickOnSearchCategoryLink("Broasted");
+		String expctgryDlt = excelutil.readStringData("ExpenseCategory", 3,1);
+		expnsctgry.ClickOnSearchCategoryLink(expctgryDlt);
 		expnsctgry.ClickOnDeleteButton();
-		expnsctgry.ClickOnSearchCategoryLink("Broasted");
-		Assert.assertEquals(expnsctgry.getCategryNameFromSearchResult(), "No matching records found",
+		expnsctgry.ClickOnSearchCategoryLink(expctgryDlt);
+		Assert.assertEquals(expnsctgry.getCategryNameFromSearchResult(), AutomationConstants.ErrorMessage,
 				"Failure message : category name not matched");
 	}
 }

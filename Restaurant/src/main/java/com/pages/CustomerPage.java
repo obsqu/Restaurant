@@ -5,12 +5,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.utilities.WaitUtils;
 import com.utilities.WebElementUtils;
 
 public class CustomerPage {
 
 	WebDriver driver;
 	WebElementUtils elementUtils = new WebElementUtils();
+	WaitUtils waitutil = new WaitUtils();
 	@FindBy(xpath = "//input[@id='CustomerName']")
 	public WebElement customerName;
 	@FindBy(xpath = "//input[@id='CustomerPhone']")
@@ -119,6 +121,9 @@ public class CustomerPage {
 	}
 	public void SearchDetails(String value) {
 		elementUtils.enteringValuetoElements(driver, SearchBtn, value);
+	}
+	public void WaitCustomer() {
+		waitutil.waitForElementToBeClickable(driver, customerName, 20);
 	}
 
 }

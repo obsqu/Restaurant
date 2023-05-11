@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.utilities.GenericUtils;
+import com.utilities.WaitUtils;
 import com.utilities.WebElementUtils;
 
 public class SupplierPage {
@@ -13,6 +14,7 @@ public class SupplierPage {
 	WebDriver driver;
 	WebElementUtils elementutil = new WebElementUtils();
 	GenericUtils droputil = new GenericUtils();
+	WaitUtils waitutil = new WaitUtils();
 	@FindBy(xpath = "//button[@class='btn btn-add btn-lg']")
 	public WebElement addSupplierrBtn;
 	@FindBy(xpath = "//button[@class='btn btn-add']")
@@ -111,5 +113,8 @@ public class SupplierPage {
 	}
 	public void ClickOnSearchDetails(String value) {
 		elementutil.enteringValuetoElements(driver, SearchBtn, value);
+	}
+	public void waitSupplier() {
+		waitutil.waitForElementToBeClickable(driver, suplierName, 20);
 	}
 }

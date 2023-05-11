@@ -5,12 +5,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.utilities.WaitUtils;
 import com.utilities.WebElementUtils;
 
 public class ExpenseCategoryPage {
 
 	WebDriver driver;
 	WebElementUtils elementutil = new WebElementUtils();
+	WaitUtils waituti= new WaitUtils();
 	@FindBy(xpath = "//button[@class='btn btn-add btn-lg']")
 	public WebElement addCategoryButn;
 	@FindBy(xpath = "//input[@class='form-control input-sm']")
@@ -72,6 +74,9 @@ public class ExpenseCategoryPage {
 	public void ClickOnDeleteButton() {
 		elementutil.clickonTheElement(driver, catgryDeleteBtn);
 		elementutil.clickonTheElement(driver, yesDltBtn);
+	}
+	public  void  waitForCategory() {
+		waituti.waitForElementToBeClickable(driver,categryName,20);
 	}
 
 }

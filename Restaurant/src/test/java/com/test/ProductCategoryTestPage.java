@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.base.AutomationBase;
+import com.constants.AutomationConstants;
 import com.pages.CommonDatas;
 import com.pages.ExpensePage;
 import com.pages.HomePage;
@@ -28,34 +29,30 @@ public class ProductCategoryTestPage extends AutomationBase {
 	LoginPage loginpg;
 	HomePage homepg;
 	ProductCategoryPage pdtctgry;
-	BrowserUtils brwsrUtil = new BrowserUtils();
-	WebElementUtils elementutil = new WebElementUtils();
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property = new PropertyUtil();
-	WaitUtils waitutil = new WaitUtils();
-	CommonDatas comon = new CommonDatas();
 	ExcelUtils excelutil;
-
+	Properties allProp;
 	@BeforeMethod
 	public void preRun() throws IOException {
 		excelutil = new ExcelUtils();
 		driver = getDriver();
-		Properties allProp = property.getAllProperties("config.properties");
-		String site = allProp.getProperty("url");
-		brwsrUtil.launchUrl(driver, site);loginpg = new LoginPage(driver);
+		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		pdtctgry = homepg.navigateToProductCategoryPage();
 
 	}
-
 	@Test(priority = 1, enabled = true)
 	public void ValidateTheMenuItemsDisplayedAddProductPage() {
 		pdtctgry.ClickOnAddCategoryButton();
+		pdtctgry.waitForCategory();
 		boolean flagdt = pdtctgry.isCategoryNameDisplayed();
 		Assert.assertTrue(flagdt, "Fail: CategoryName field is not displayed");
 		pdtctgry.ClickOnCloseButton();
 	}
-
 	@Test(priority = 2, enabled = true)
 	public void validateAddProductCategoryDetails() throws Exception {
 		String catgrynm = excelutil.readStringData("ProductCategory", 2, 1);
@@ -63,33 +60,29 @@ public class ProductCategoryTestPage extends AutomationBase {
 		pdtctgry.ClickOnCategoryName();
 		pdtctgry.enterValueForCategryName(catgrynm);
 		pdtctgry.ClickOnSubmitCategoryValues();
-		brwsrUtil.refreshPage(driver);
-		pdtctgry.ClickOnSearchCategoryLink("Broasted");
-		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), "Broasted",
+		pdtctgry.ClickOnSearchCategoryLink(catgrynm);
+		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), catgrynm,
 				"Failure message : category name not matched");
 	}
-
 	@Test(priority = 3, enabled = true)
 	public void validateEditButtonForCategoryDetails() {
-
-		pdtctgry.ClickOnSearchCategoryLink("Pizza");
+		String pdtctryEdit = excelutil.readStringData("ProductCategory", 2, 1);
+		String pdtctgrynm = excelutil.readStringData("ProductCategory", 3,1);
+		pdtctgry.ClickOnSearchCategoryLink(pdtctryEdit);
 		pdtctgry.ClickOnCategoryEditButton();
-		pdtctgry.enterValueForCategryName("Munch");
+		pdtctgry.enterValueForCategryName(pdtctgrynm);
 		pdtctgry.ClickOnSubmitEditButton();
-		brwsrUtil.refreshPage(driver);
-		pdtctgry.ClickOnSearchCategoryLink("Munch");
-		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), "Munch",
+		pdtctgry.ClickOnSearchCategoryLink(pdtctgrynm);
+		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), pdtctgrynm,
 				"Failure message : category name not matched");
 	}
-
 	@Test(priority = 4, enabled = true)
 	public void validateDeleteWaiterData() {
-		pdtctgry.ClickOnSearchCategoryLink("lemon");
+		String pdtctgryDlt = excelutil.readStringData("ProductCategory", 3,1);
+		pdtctgry.ClickOnSearchCategoryLink(pdtctgryDlt);
 		pdtctgry.ClickOnDeleteButton();
-		pdtctgry.ClickOnSearchCategoryLink("lemon");
-		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), "No matching records found",
+		pdtctgry.ClickOnSearchCategoryLink(pdtctgryDlt);
+		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), AutomationConstants.ErrorMessage,
 				"Failure message : category name not matched");
-
 	}
-
 }

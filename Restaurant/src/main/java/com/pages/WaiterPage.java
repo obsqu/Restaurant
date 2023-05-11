@@ -6,12 +6,14 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.utilities.GenericUtils;
+import com.utilities.WaitUtils;
 import com.utilities.WebElementUtils;
 
 public class WaiterPage {
 
 	WebDriver driver;
 	WebElementUtils elementutil = new WebElementUtils();
+	WaitUtils waitutil = new WaitUtils();
 	GenericUtils droputil = new GenericUtils();
 	@FindBy(xpath = "//button[@class='btn btn-add btn-lg']")
 	public WebElement addWaiterButn;
@@ -116,5 +118,8 @@ public class WaiterPage {
 	}
 	public void clickEditWaiterDataButton() {
 		elementutil.clickonTheElement(driver, waiterEditBtn);
+	}
+	public void WaitForWaiter() {
+		waitutil.waitForElementToBeClickable(driver, waiterName, 20);
 	}
 }

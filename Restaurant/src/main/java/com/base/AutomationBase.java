@@ -1,5 +1,6 @@
 package com.base;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
@@ -12,97 +13,72 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.constants.AutomationConstants;
 import com.pages.LoginPage;
 import com.utilities.BrowserUtils;
 import com.utilities.PropertyUtil;
 
 public class AutomationBase {
 	static WebDriver driver;
-	
-	BrowserUtils brwsrUtil;
+	BrowserUtils brwsrUtil= new BrowserUtils();
 	LoginPage loginpg;
 	PropertyUtil property;
 	Properties allProp;
-	
-	
-@BeforeTest
-@Parameters("browserName")
-public void preLaunch(String browserName) throws Exception
-{
-	launchBrowser(browserName);
-	loginpg=new LoginPage(driver);
-	brwsrUtil=new BrowserUtils();
-	property=new PropertyUtil();
-	allProp=property.getAllProperties("config.properties");
-	brwsrUtil.launchUrl(driver,allProp.getProperty("url"));
-}
 
-	public void launchBrowser(String browserName) throws Exception
-	{
-		switch(browserName)
-		{
+	@BeforeTest
+	@Parameters("browserName")
+	public void preLaunch(String browserName)  {
+		launchBrowser(browserName);
+		loginpg = new LoginPage(driver); 
+		property = new PropertyUtil();
+		try {
+			allProp = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			
+		}
+		brwsrUtil.launchUrl(driver, allProp.getProperty("url"));
+	}
+	public void launchBrowser(String browserName) {
+		switch (browserName) {
 		case "chrome":
 			launchChromeBrowser();
 			break;
-			
 		case "edge":
 			launchEdgeBrowser();
 			break;
-			
 		case "firefox":
 			launchFireFoxBrowser();
-			break;	
-		default:
-			//System.out.println(AutomationConsttants.CHECKBROWSER_MESSAGE);
 			break;
-		}
-		
-	}
-	
-	private void launchChromeBrowser() throws Exception
-	{
-		try
-		{
-			driver=new ChromeDriver();
-			driver.manage().window().maximize();
-			
-		}catch(Exception e)
-		{
-			throw new Exception(e);
+		default:
+			throw new RuntimeException(AutomationConstants.browserNameCheck);
 		}
 	}
-	
-	private void launchEdgeBrowser() throws Exception
-	{
-		try
-		{
-			driver=new EdgeDriver();
-			driver.manage().window().maximize();
-			
-		}catch(Exception e)
-		{
-			throw new Exception(e);
+	private void launchChromeBrowser() {
+		try {
+			driver = new ChromeDriver();
+			brwsrUtil.maximizeWindow(driver);
+		} catch (Exception e) {
+			throw new RuntimeException();
 		}
 	}
-	
-	private void launchFireFoxBrowser() throws Exception
-	{
-		try
-		{
-			driver=new FirefoxDriver();
-			driver.manage().window().maximize();
-			
-		}catch(Exception e)
-		{ 
-			throw new Exception(e);
+	private void launchEdgeBrowser() {
+		try {
+			driver = new EdgeDriver();
+			brwsrUtil.maximizeWindow(driver);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
+	private void launchFireFoxBrowser() {
+		try {
+			driver = new FirefoxDriver();
+			brwsrUtil.maximizeWindow(driver);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	public static WebDriver getDriver() {
 
-	public static  WebDriver getDriver() {
-		
 		return driver;
 	}
-	
-	
-
 }

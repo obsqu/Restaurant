@@ -7,12 +7,14 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.utilities.WebElementUtils;
 import com.utilities.GenericUtils;
+import com.utilities.WaitUtils;
 
 public class ProductPage {
 
 	WebDriver driver;
 	WebElementUtils elementutil = new WebElementUtils();
 	GenericUtils droputil = new GenericUtils();
+	WaitUtils waitutil = new WaitUtils();
 	@FindBy(xpath = "//span[text()='Product']")
 	public WebElement productlink;
 	@FindBy(xpath = "//input[@class='form-control input-sm']")
@@ -123,6 +125,7 @@ public class ProductPage {
 		return flag;
 	}
 	public void clickOnAddProductButton() {
+		
 		elementutil.clickonTheElement(driver, addpdt);
 	}
 	public boolean isProductTypeDisplayed() {
@@ -232,6 +235,7 @@ public class ProductPage {
 		elementutil.clickonTheElement(driver, pdtclose);
 	}
 	public void ProductSearch(String value) {
+		elementutil.cleartheFieldd(driver,pdtSearch);
 		elementutil.enteringValuetoElements(driver, pdtSearch, value);
 	}
 	public String getProductCodeFromSearchResults() {
@@ -298,5 +302,9 @@ public class ProductPage {
 	}
 	public void printButnOnBarcode() {
 		elementutil.clickonTheElement(driver, printOnBarcode);
+	}
+	public void WaitProductpage() {
+		waitutil.waitForElementToBeClickable(driver, pdtype, 20);
+		waitutil.waitForElementToBeClickable(driver,pdtcode, 20);
 	}
 }

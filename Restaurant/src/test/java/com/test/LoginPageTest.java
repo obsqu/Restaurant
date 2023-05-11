@@ -24,17 +24,20 @@ public class LoginPageTest extends AutomationBase {
 	Properties prop;
 	PropertyUtil property;
 
-	@Test(priority = 1, enabled = true)
-	public void validateLogin() throws IOException {
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateLogin()  {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		prop = property.getAllProperties("config.properties");
+		try {
+			prop = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+		}
 		loginpg.performlogin(prop.getProperty("username"), prop.getProperty("password"));
 
 		Assert.assertTrue(homepg.isPosDisplayed(), "Failure : Login failed");
 	}
 
-	
 }
+

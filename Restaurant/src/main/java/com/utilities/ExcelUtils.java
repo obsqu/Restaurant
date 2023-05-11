@@ -2,6 +2,7 @@ package com.utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,11 +13,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelUtils {
 
 	final static String currentDir = System.getProperty("user.dir");
-	static String filePath = currentDir + ".//src/test//resources//RestaurantDatas.xlsx";
+	static String filePath = currentDir + "\\src\\test\\resources\\RestaurantDatas.xlsx";
 	static XSSFWorkbook workbook;
 	static XSSFSheet sheet;
 	static FileInputStream fs;
 	File file = new File(filePath);
+	
+	public ExcelUtils() {
+		try {
+			workbook = new XSSFWorkbook(filePath);
+		} catch (IOException e) {
+			throw new RuntimeException("Error During reading filepath");
+		}
+		sheet=workbook.getSheetAt(0);
+	}
 
 	/**
 	 * This method to get count row
@@ -24,9 +34,14 @@ public class ExcelUtils {
 	 * @throws IOException
 	 * 
 	 */
-	public void getNumberOfRows() throws IOException {
-		fs = new FileInputStream(file);
-		workbook = new XSSFWorkbook(fs);
+	public void getNumberOfRows()  {
+		try {
+			fs = new FileInputStream(file);
+			workbook = new XSSFWorkbook(fs);
+		} catch (IOException e) {
+			throw new RuntimeException("Error During reading file");
+		}
+		
 		sheet = workbook.getSheetAt(0);
 		int rowCount = sheet.getPhysicalNumberOfRows();
 		System.out.println(rowCount);
@@ -42,7 +57,7 @@ public class ExcelUtils {
 		try {
 			colCount = sheet.getRow(0).getLastCellNum();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			throw new RuntimeException("Error During reading file");
 		}
 		return colCount;
 	}
@@ -57,13 +72,16 @@ public class ExcelUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public String readStringData(String sheetName, int rowNum, int colNum) throws IOException {
-		fs = new FileInputStream(file);
-		workbook = new XSSFWorkbook(fs);
-		sheet = workbook.getSheetAt(0);
-		String cellValue = sheet.getRow(rowNum).getCell(colNum).getStringCellValue();
+	public String readStringData(String sheetName, int rowNum, int colNum) {
+		try {
+			fs = new FileInputStream(file);
+			workbook = new XSSFWorkbook(fs);
+		} catch (IOException e) {
+			throw new RuntimeException("Error During reading file");
+		}		
+		sheet = workbook.getSheet(sheetName);
+		String cellValue = sheet.getRow(rowNum-1).getCell(colNum-1).getStringCellValue();
 		return cellValue;
-
 	}
 
 	/**
@@ -76,12 +94,15 @@ public class ExcelUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public int readIntegerData(String sheetName, int rowNum, int colNum) throws IOException {
-		fs = new FileInputStream(file);
-		workbook = new XSSFWorkbook(fs);
-		sheet = workbook.getSheetAt(0);
-		int cellValue = (int) sheet.getRow(rowNum).getCell(colNum).getNumericCellValue();
+	public int readIntegerData(String sheetName, int rowNum, int colNum) {
+		try {
+			fs = new FileInputStream(file);
+			workbook = new XSSFWorkbook(fs);
+		} catch (IOException e) {
+			throw new RuntimeException("Error During reading file");
+		}		
+		sheet = workbook.getSheet(sheetName);
+		int cellValue = (int) sheet.getRow(rowNum-1).getCell(colNum-1).getNumericCellValue();
 		return cellValue;
 	}
-
 }

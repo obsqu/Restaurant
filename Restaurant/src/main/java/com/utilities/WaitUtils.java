@@ -40,7 +40,7 @@ public class WaitUtils {
 	public void waitForAnElement(WebDriver driver, WebElement element, int timeOut) throws Exception {
 		try {
 			wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
-			// wait.until(ExpectedConditions.presenceOfElementLocated((By) element));
+			wait.until(ExpectedConditions.presenceOfElementLocated((By) element));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.getCause());
@@ -56,7 +56,7 @@ public class WaitUtils {
 	public void explicitWait(WebDriver driver, WebElement element, int timeOut) {
 		try {
 			wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
-			// wait.until(ExpectedConditions.visibilityOf(element));
+			wait.until(ExpectedConditions.visibilityOf(element));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.getCause());
@@ -72,7 +72,7 @@ public class WaitUtils {
 	public void waitForVisibilityOfElement(WebDriver driver, WebElement element, int timeOut) {
 		try {
 			wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
-			// wait.until(ExpectedConditions.visibilityOfElementLocated((By) element));
+			 wait.until(ExpectedConditions.visibilityOfElementLocated((By) element));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.getCause());
@@ -102,7 +102,7 @@ public class WaitUtils {
 	public void waitForElementToBeClickable(WebDriver driver, WebElement element, int timeOut) {
 		try {
 			wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
-			// wait.until(ExpectedConditions.elementToBeClickable(element));
+			 wait.until(ExpectedConditions.elementToBeClickable(element));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.getCause());

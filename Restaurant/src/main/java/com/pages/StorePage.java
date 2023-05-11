@@ -5,12 +5,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.utilities.WaitUtils;
 import com.utilities.WebElementUtils;
 
 public class StorePage {
 
 	WebDriver driver;
 	WebElementUtils elementutils = new WebElementUtils();
+	WaitUtils waitutil = new WaitUtils();
 	@FindBy(xpath = "//button[@class='btn btn-add btn-lg']")
 	public WebElement addStoreButn;
 	@FindBy(xpath = "//button[text()='Close']")
@@ -146,5 +148,8 @@ public class StorePage {
 	}
 	public void ManageStoreTables() {
 		elementutils.clickonTheElement(driver, storeManageTblButn);
+	}
+	public void WaitStoreName() {
+		waitutil.waitForElementToBeClickable(driver, storeName, 20);
 	}
 }

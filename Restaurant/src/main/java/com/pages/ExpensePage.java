@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.utilities.GenericUtils;
+import com.utilities.WaitUtils;
 import com.utilities.WebElementUtils;
 
 public class ExpensePage {
@@ -13,6 +14,7 @@ public class ExpensePage {
 	WebDriver driver;
 	WebElementUtils elementutil = new WebElementUtils();
 	GenericUtils droputil = new GenericUtils();
+	WaitUtils waitutil=new WaitUtils();
 	@FindBy(xpath = "//button[@class='btn btn-add btn-lg']")
 	public WebElement addExpenseButn;
 	@FindBy(xpath = "//input[@class='form-control input-sm']")
@@ -33,22 +35,24 @@ public class ExpensePage {
 	public WebElement expenseSubmitBtn;
 	@FindBy(xpath = "//button[text()='Close']")
 	public WebElement expenseClosBtn;
-	@FindBy(xpath = "(//table[@id='Table']//tr//td)[1]")
+	@FindBy(xpath = "(//table[@id='table']//tr//td)[1]")
 	public WebElement expensedate_searchresult;
-	@FindBy(xpath = "(//table[@id='Table']//tr//td)[2]")
+	@FindBy(xpath = "(//table[@id='table']//tr//td)[2]")
 	public WebElement expensereferense_searchresult;
-	@FindBy(xpath = "(//table[@id='Table']//tr//td)[3]")
+	@FindBy(xpath = "(//table[@id='table']//tr//td)[3]")
 	public WebElement expensestore_searchresult;
-	@FindBy(xpath = "(//table[@id='Table']//tr//td)[4]")
+	@FindBy(xpath = "(//table[@id='table']//tr//td)[4]")
 	public WebElement expensecategry_searchresult;
-	@FindBy(xpath = "(//table[@id='Table']//tr//td)[5]")
+	@FindBy(xpath = "(//table[@id='table']//tr//td)[5]")
 	public WebElement expenseamount_searchresult;
-	@FindBy(xpath = "(//table[@id='Table']//tr//td)[6]")
+	@FindBy(xpath = "(//table[@id='table']//tr//td)[6]")
 	public WebElement expenscreated_searchresult;
 	@FindBy(xpath = "(//a[@class='btn btn-default'])[1]")
 	public WebElement expenseDeleteBtn;
 	@FindBy(xpath = "//button[text()='Yes, delete it!']")
 	public WebElement yesDltBtn;
+	@FindBy(xpath = "//button[text()='OK']")
+	public WebElement OkBtn;
 	@FindBy(xpath = "(//a[@class='btn btn-default'])[2]")
 	public WebElement expenseEditBtn;
 	@FindBy(xpath = "//button[text()='Submit']")
@@ -140,5 +144,9 @@ public class ExpensePage {
 	public void ClickOnDeleteButton() {
 		elementutil.clickonTheElement(driver, expenseDeleteBtn);
 		elementutil.clickonTheElement(driver, yesDltBtn);
+		elementutil.clickonTheElement(driver, OkBtn);
+	}
+	public void waitForExpense() {
+		waitutil.waitForElementToBeClickable(driver,expenseDate,20);
 	}
 }

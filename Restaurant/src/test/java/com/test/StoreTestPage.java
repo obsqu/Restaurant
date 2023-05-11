@@ -1,6 +1,7 @@
 package com.test;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
@@ -10,15 +11,15 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.base.AutomationBase;
+import com.constants.AutomationConstants;
 import com.pages.HomePage;
 import com.pages.LoginPage;
-import com.pages.ProductPage;
 import com.pages.StorePage;
 import com.utilities.BrowserUtils;
+import com.utilities.ExcelRead;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
 import com.utilities.WaitUtils;
-import com.utilities.WebElementUtils;
 
 public class StoreTestPage extends AutomationBase {
 
@@ -26,30 +27,25 @@ public class StoreTestPage extends AutomationBase {
 	LoginPage loginpg;
 	HomePage homepg;
 	StorePage storepg;
-	BrowserUtils brwsrUtil = new BrowserUtils();
-	WebElementUtils elementutil = new WebElementUtils();
 	SoftAssert soft = new SoftAssert();
-	PropertyUtil property = new PropertyUtil();
-	WaitUtils waitutil = new WaitUtils();
+	PropertyUtil property;
+	Properties allProp;
 	ExcelUtils excelutil;
-
 	@BeforeMethod
 	public void preRun() throws IOException {
-		excelutil = new ExcelUtils();
 		driver = getDriver();
-		Properties allProp = property.getAllProperties("config.properties");
-		String site = allProp.getProperty("url");
-		brwsrUtil.launchUrl(driver, site);
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		storepg = homepg.navigateToStorePage();
+		excelutil= new ExcelUtils();
 	}
-
 	@Test(priority = 1, enabled = true)
-
-	public void validateElementsonAddProduct() {
+	public void validateElementsonAddStore() {
 		storepg.clickOnAddStoreButton();
-		waitutil.waitForElementToBeClickable(driver, storepg.storeName, 20);
+		storepg.WaitStoreName();
 		soft.assertTrue(storepg.isStoreNameDisplayed(), "Failure Message: StoreName is not displayed");
 		soft.assertTrue(storepg.isStoreEmailDisplayed(), "Failure Message: StoreEmail is not displayed");
 		soft.assertTrue(storepg.isStorePhoneDisplayed(), "Failure Message: Storephone is not displayed");
@@ -60,20 +56,19 @@ public class StoreTestPage extends AutomationBase {
 		storepg.clickOnCloseStoreButton();
 		soft.assertAll();
 	}
-
 	@Test(priority = 2, enabled = true)
 	public void validateAddDatasToStore() throws IOException {
-		String storenm = excelutil.readStringData("Stores", 2, 1);
-		String storeemail = excelutil.readStringData("Stores", 2, 2);
-		String storephone = excelutil.readStringData("Stores", 2, 3);
-		String storecountry = excelutil.readStringData("Stores", 2, 4);
-		String storecity = excelutil.readStringData("Stores", 2, 5);
-		String storeaddress = excelutil.readStringData("Stores", 2, 6);
-		String storecustom = excelutil.readStringData("Stores", 2, 7);
+		String storenm=excelutil.readStringData("Stores",2,1);
+		String storemail=excelutil.readStringData("Stores",2,2);
+		String storephone=excelutil.readStringData("Stores",2,3);
+		String storecountry=excelutil.readStringData("Stores",2,4);
+		String storecity=excelutil.readStringData("Stores",2,5);
+		String storeaddress=excelutil.readStringData("Stores",2,6);
+		String storecustom=excelutil.readStringData("Stores",2,7);
 		storepg.clickOnAddStoreButton();
-		storepg.clickOnStoreName();
+		storepg.WaitStoreName();
 		storepg.enterValueToStoreName(storenm);
-		storepg.enterValueToStoreEmailID(storeemail);
+		storepg.enterValueToStoreEmailID(storemail);
 		storepg.enterValueToStorePhoneNumber(storephone);
 		storepg.enterValueToStoreCountryr(storecountry);
 		storepg.enterValueToStoreCity(storecity);
@@ -81,47 +76,56 @@ public class StoreTestPage extends AutomationBase {
 		storepg.enterValueToStoreCustom(storecustom);
 		storepg.submitStoreValues();
 		storepg.searchStoreLink(storephone);
-		soft.assertEquals(storepg.getStoreNameFromSearchResults(), "SNStores",
+		soft.assertEquals(storepg.getStoreNameFromSearchResults(), storenm,
 				"Failure Message: Store Name is not matched");
-		soft.assertEquals(storepg.getStoreEmailidFromSearchResults(), "miraj@gmail.com",
+		soft.assertEquals(storepg.getStoreEmailidFromSearchResults(),storemail,
 				"Failure Message: Store emailid is not matched");
-		soft.assertEquals(storepg.getStorePhoneNoFromSearchResults(), "345487643",
+		soft.assertEquals(storepg.getStorePhoneNoFromSearchResults(),storephone,
 				"Failure Message: Store Phoneno is not matched");
-		soft.assertEquals(storepg.getStoreCountryFromSearchResults(), "India",
+		soft.assertEquals(storepg.getStoreCountryFromSearchResults(),storecountry,
 				"Failure Message: Store Country is not matched");
-		soft.assertEquals(storepg.getStoreCityFromSearchResults(), "TVM", "Failure Message: Store City is not matched");
+		soft.assertEquals(storepg.getStoreCityFromSearchResults(), storecity, "Failure Message: Store City is not matched");
 		soft.assertAll();
 	}
 	@Test(priority = 4, enabled = true)
 	public void validateDeleteStoreDatas() {
-		storepg.searchStoreLink("booster");
+		String storeDlt=excelutil.readStringData("Stores",3,1);
+		storepg.searchStoreLink(storeDlt);
 		storepg.deleteStoreDetails();
-		storepg.searchStoreLink("booste");
-		Assert.assertEquals(storepg.getStoreNameFromSearchResults(), "No matching records found",
+		storepg.searchStoreLink(storeDlt);
+		Assert.assertEquals(storepg.getStoreNameFromSearchResults(), AutomationConstants.ErrorMessage,
 				"Failure Message: Store Name is not matched");
 	}
 	@Test(priority = 3, enabled = true)
 	public void validateEditStoreDetails() {
-		storepg.searchStoreLink("BCD");
+		String storenmEdt=excelutil.readStringData("Stores",2,1);
+		String storenm=excelutil.readStringData("Stores",3,1);
+		String storemail=excelutil.readStringData("Stores",3,2);
+		String storephone=excelutil.readStringData("Stores",3,3);
+		String storecountry=excelutil.readStringData("Stores",3,4);
+		String storecity=excelutil.readStringData("Stores",3,5);
+		String storeaddress=excelutil.readStringData("Stores",3,6);
+		String storecustom=excelutil.readStringData("Stores",3,7);
+		storepg.searchStoreLink(storenmEdt);
 		storepg.editStoreDetails();
-		storepg.enterValueToStoreName("ANSStores");
-		storepg.enterValueToStoreEmailID("shibis@gmail.com");
-		storepg.enterValueToStorePhoneNumber("8876552872");
-		storepg.enterValueToStoreCountryr("INDIA");
-		storepg.enterValueToStoreCity("Kollam");
-		storepg.enterValueToStoreAddress("SN manzil");
-		storepg.enterValueToStoreCustom("HiaAll");
+		storepg.enterValueToStoreName(storenm);
+		storepg.enterValueToStoreEmailID(storemail);
+		storepg.enterValueToStorePhoneNumber(storephone);
+		storepg.enterValueToStoreCountryr(storecountry);
+		storepg.enterValueToStoreCity(storecity);
+		storepg.enterValueToStoreAddress(storeaddress);
+		storepg.enterValueToStoreCustom(storecustom);
 		storepg.submitEditDetails();
-		storepg.searchStoreLink("8876552872");
-		soft.assertEquals(storepg.getStoreNameFromSearchResults(), "ANSStores",
+		storepg.searchStoreLink(storephone);
+		soft.assertEquals(storepg.getStoreNameFromSearchResults(),storenm,
 				"Failure Message: Store Name is not matched");
-		soft.assertEquals(storepg.getStoreEmailidFromSearchResults(), "shibis@gmail.com",
+		soft.assertEquals(storepg.getStoreEmailidFromSearchResults(),storemail,
 				"Failure Message: Store emailid is not matched");
-		soft.assertEquals(storepg.getStorePhoneNoFromSearchResults(), "8876552872",
+		soft.assertEquals(storepg.getStorePhoneNoFromSearchResults(), storephone,
 				"Failure Message: Store Phoneno is not matched");
-		soft.assertEquals(storepg.getStoreCountryFromSearchResults(), "INDIA",
+		soft.assertEquals(storepg.getStoreCountryFromSearchResults(),storecountry,
 				"Failure Message: Store Country is not matched");
-		soft.assertEquals(storepg.getStoreCityFromSearchResults(), "Kollam",
+		soft.assertEquals(storepg.getStoreCityFromSearchResults(),storecity,
 				"Failure Message: Store City is not matched");
 		soft.assertAll();
 	}

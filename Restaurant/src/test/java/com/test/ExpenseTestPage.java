@@ -8,49 +8,38 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-
 import com.base.AutomationBase;
-import com.pages.CommonDatas;
+import com.constants.AutomationConstants;
 import com.pages.ExpensePage;
 import com.pages.HomePage;
 import com.pages.LoginPage;
-import com.utilities.BrowserUtils;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
-import com.utilities.WaitUtils;
-import com.utilities.WebElementUtils;
-
 public class ExpenseTestPage extends AutomationBase {
 
 	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	ExpensePage expnspg;
-	BrowserUtils brwsrUtil = new BrowserUtils();
-	WebElementUtils elementutil = new WebElementUtils();
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property = new PropertyUtil();
-	WaitUtils waitutil = new WaitUtils();
-	CommonDatas comon = new CommonDatas();
+	Properties allProp;
 	ExcelUtils excelutil;
-
 	@BeforeMethod
 	public void preRun() throws IOException {
 		excelutil = new ExcelUtils();
 		driver = getDriver();
-		Properties allProp = property.getAllProperties("config.properties");
-		String site = allProp.getProperty("url");
-		brwsrUtil.launchUrl(driver, site);
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		expnspg = homepg.navigateToExpensesPage();
-
 	}
-
 	@Test(priority = 1, enabled = true)
-	public void ValidateTheMenuItemsDisplayedAddExpensePage() {
+	public void ValidateTheMenuItemsDisplayedOnAddExpensePage() {
 		expnspg.ClickOnAddExpenseButton();
-		waitutil.waitForElementToBeClickable(driver, expnspg.expenseDate, 20);
+		expnspg.waitForExpense();
 		soft.assertTrue(expnspg.isExpensedateDisplayed(), "Fail: ExpenseDate field is not displayed");
 		soft.assertTrue(expnspg.isExpenseRefernseDisplayed(), "Fail: ExpenseReference field is not displayed");
 		soft.assertTrue(expnspg.isExpenseCategoryDisplayed(), "Fail: ExpenseCategory field is not displayed");
@@ -59,72 +48,75 @@ public class ExpenseTestPage extends AutomationBase {
 		soft.assertTrue(expnspg.isExpenseNoteDisplayed(), "Fail: ExpenseNote field is not displayed");
 		soft.assertAll();
 		expnspg.ClickOnCloseButton();
-
 	}
-
 	@Test(priority = 2, enabled = true)
 	public void validateAddExpenseDetails() throws Exception {
+		String expnsDate = excelutil.readStringData("Expense", 2, 1);
+		String expnsRefrnc = excelutil.readStringData("Expense", 2, 2);
+		String expnsCatgry = excelutil.readStringData("Expense", 2, 3);
+		String expnsStr = excelutil.readStringData("Expense",2,4);
+		String expnsAmnt = excelutil.readStringData("Expense", 2,5);
+		String expnsNote = excelutil.readStringData("Expense", 2,6);
 		expnspg.ClickOnAddExpenseButton();
-		waitutil.waitForAnElement(driver, expnspg.expenseDate, 10);
-		expnspg.enterValueForExpenseDate("03/23/2023");
-		expnspg.enterValueForExpenseReference("Miraj");
-		expnspg.selectValueForExpenseCategory("Pasta");
-		expnspg.selectValueForExpenseStore("MNC");
-		expnspg.enterValueForExpenseAmount("5600");
-		expnspg.enterValueForExpenseNote("Hai All");
+		expnspg.waitForExpense();
+		expnspg.enterValueForExpenseDate(expnsDate);
+		expnspg.enterValueForExpenseReference(expnsRefrnc);
+		expnspg.selectValueForExpenseCategory(expnsCatgry);
+		expnspg.selectValueForExpenseStore(expnsStr);
+		expnspg.enterValueForExpenseAmount(expnsAmnt);
+		expnspg.enterValueForExpenseNote(expnsNote);
 		expnspg.ClickOnSubmitExpenseValues();
-		expnspg.ClickOnSearchExpenseLink("Miraj");
-		soft.assertEquals(expnspg.getExpenseDateFromSearchResult(), "03/23/2023",
+		expnspg.ClickOnSearchExpenseLink(expnsRefrnc);
+		soft.assertEquals(expnspg.getExpenseDateFromSearchResult(), expnsDate,
 				"Failure message : expense date not matched");
-		soft.assertEquals(expnspg.getExpenseReferenseFromSearchResult(), "Miraj",
+		soft.assertEquals(expnspg.getExpenseReferenseFromSearchResult(), expnsRefrnc,
 				"Failure message : expense refernse not matched");
-		soft.assertEquals(expnspg.getExpenseAmountFromSearchResult(), "5600",
+		soft.assertEquals(expnspg.getExpenseAmountFromSearchResult(),20000.000,
 				"Failure message : expense amount not matched");
-		soft.assertEquals(expnspg.getExpenseCategoryFromSearchResult(), "Pasta",
+		soft.assertEquals(expnspg.getExpenseCategoryFromSearchResult(), expnsCatgry,
 				"Failure message : expense category not matched");
-		soft.assertEquals(expnspg.getExpenseStoreFromSearchResult(), "MNC",
+		soft.assertEquals(expnspg.getExpenseStoreFromSearchResult(), expnsStr,
 				"Failure message : expense store not matched");
 		soft.assertAll();
 	}
-
 	@Test(priority=3,enabled=true)
 	public void validateEditButtonForExpenseDetails() {
-
-		expnspg.ClickOnSearchExpenseLink("Shibina");
+		String expnsEdt = excelutil.readStringData("Expense", 2, 2);
+		String expnsDate = excelutil.readStringData("Expense", 3, 1);
+		String expnsRefrnc = excelutil.readStringData("Expense",3, 2);
+		String expnsCatgry = excelutil.readStringData("Expense", 3, 3);
+		String expnsStr = excelutil.readStringData("Expense",3,4);
+		String expnsAmnt = excelutil.readStringData("Expense",3,5);
+		String expnsNote = excelutil.readStringData("Expense", 3,6);
+		expnspg.ClickOnSearchExpenseLink(expnsEdt);
 		expnspg.ClickOnExpenseEditButton();
-		expnspg.enterValueForExpenseDate("05/04/2023");
-		expnspg.enterValueForExpenseReference("Mirus");
-		expnspg.selectValueForExpenseCategory("cutlet");
-		expnspg.selectValueForExpenseStore("MCDS");
-		expnspg.enterValueForExpenseAmount("500");
-		expnspg.enterValueForExpenseNote("Taste");
-
+		expnspg.enterValueForExpenseDate(expnsDate);
+		expnspg.enterValueForExpenseReference(expnsRefrnc);
+		expnspg.selectValueForExpenseCategory(expnsCatgry);
+		expnspg.selectValueForExpenseStore(expnsStr);
+		expnspg.enterValueForExpenseAmount(expnsAmnt);
+		expnspg.enterValueForExpenseNote(expnsNote);
 		expnspg.ClickOnSubmitEditButton();
-		expnspg.ClickOnSearchExpenseLink("Mirus");
-
-		soft.assertEquals(expnspg.getExpenseDateFromSearchResult(), "05/04/2023",
+		expnspg.ClickOnSearchExpenseLink(expnsRefrnc);
+		soft.assertEquals(expnspg.getExpenseDateFromSearchResult(), expnsDate,
 				"Failure message : expense date not matched");
-		soft.assertEquals(expnspg.getExpenseReferenseFromSearchResult(), "Mirus",
+		soft.assertEquals(expnspg.getExpenseReferenseFromSearchResult(), expnsRefrnc,
 				"Failure message : expense refernse not matched");
-		soft.assertEquals(expnspg.getExpenseAmountFromSearchResult(), "500",
+		soft.assertEquals(expnspg.getExpenseAmountFromSearchResult(),expnsAmnt,
 				"Failure message : expense amount not matched");
-		soft.assertEquals(expnspg.getExpenseCategoryFromSearchResult(), "cutlet",
+		soft.assertEquals(expnspg.getExpenseCategoryFromSearchResult(), expnsCatgry,
 				"Failure message : expense category not matched");
-		soft.assertEquals(expnspg.getExpenseStoreFromSearchResult(), "MCDS",
+		soft.assertEquals(expnspg.getExpenseStoreFromSearchResult(), expnsStr,
 				"Failure message : expense store not matched");
-
 		soft.assertAll();
 	}
-
-	// @Test(priority=4,enabled=true)
-	public void validateDeleteWaiterData() {
-
-		expnspg.ClickOnSearchExpenseLink("Arun");
+	@Test(priority=4,enabled=true)
+	public void validateDeleteExpenseData() {
+		String expnsDlt = excelutil.readStringData("Expense", 3, 2);
+		expnspg.ClickOnSearchExpenseLink(expnsDlt);
 		expnspg.ClickOnDeleteButton();
-		expnspg.ClickOnSearchExpenseLink("Arun");
-		Assert.assertEquals(expnspg.getExpenseReferenseFromSearchResult(), "No matching records found",
+		expnspg.ClickOnSearchExpenseLink(expnsDlt);
+		Assert.assertEquals(expnspg.getExpenseReferenseFromSearchResult(),AutomationConstants.ErrorMessage,
 				"Failure message : Refernse value not matched");
-
 	}
-
 }

@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.base.AutomationBase;
+import com.constants.AutomationConstants;
 import com.pages.CommonDatas;
 import com.pages.HomePage;
 import com.pages.LoginPage;
@@ -28,27 +29,25 @@ public class SupplierTestPage extends AutomationBase {
 	LoginPage loginpg;
 	HomePage homepg;
 	SupplierPage splrpg;
-	BrowserUtils brwsrUtil = new BrowserUtils();
-	WebElementUtils elementutil = new WebElementUtils();
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property = new PropertyUtil();
-	WaitUtils waitutil = new WaitUtils();
+	Properties allProp;
 	ExcelUtils excelutil;
 	@BeforeMethod
 	public void preRun() throws IOException {
 		excelutil = new ExcelUtils();
 		driver = getDriver();
-		Properties allProp = property.getAllProperties("config.properties");
-		String site = allProp.getProperty("url");
-		brwsrUtil.launchUrl(driver, site);
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		splrpg = homepg.navigateToSupplierPage();
 	}
 	@Test(priority = 1, enabled = true)
-	public void validateElementsonAddProduct() {
+	public void validateElementsonAddSupplier() {
 		splrpg.ClickOnAddButton();
-		waitutil.waitForElementToBeClickable(driver, splrpg.suplierName, 20);
+		splrpg.waitSupplier();
 		soft.assertTrue(splrpg.isSupplierNameDisplayed(), "Failure Message: SupplierName is not displayed");
 		soft.assertTrue(splrpg.isSupplierEmailDisplayed(), "Failure Message: SupplierEmail is not displayed");
 		soft.assertTrue(splrpg.isSupplierPhoneDisplayed(), "Failure Message: Supplierphone is not displayed");
@@ -65,47 +64,52 @@ public class SupplierTestPage extends AutomationBase {
 		String suplrnote = excelutil.readStringData("Supplier", 2, 4);
 		splrpg.ClickOnAddButton();
 		splrpg.clickOnSupplierName();
-		waitutil.waitForElementToBeClickable(driver, splrpg.suplierName, 20);
+		splrpg.waitSupplier();
 		splrpg.enterSupplierName(suplrnm);
-		waitutil.waitForVisibilityOfElement(driver, splrpg.suplierPhone, 20);
 		splrpg.enterSupplierPhone(suplrphone);
 		splrpg.enterSupplierMail(suplremail);
 		splrpg.enterSupplierNote(suplrnote);
 		splrpg.ClickOnSubmitDatas();
-		splrpg.ClickOnSearchDetails("Bilal");
-		soft.assertEquals(splrpg.getSuplierNameFromSearchResult(), "Bilal",
+		splrpg.ClickOnSearchDetails(suplrnm);
+		soft.assertEquals(splrpg.getSuplierNameFromSearchResult(), suplrnm,
 				"Failure message : suplier name not matched");
-		soft.assertEquals(splrpg.getSuplierPhoneNumberFromSearchResult(), "65830489",
+		soft.assertEquals(splrpg.getSuplierPhoneNumberFromSearchResult(), suplrphone,
 				"Failure message : suplier phone not matched");
-		soft.assertEquals(splrpg.getSuplierEmailidFromSearchResult(), "bilal@gmail.com",
+		soft.assertEquals(splrpg.getSuplierEmailidFromSearchResult(), suplremail,
 				"Failure message : suplier mail not matched");
 		soft.assertAll();
 	}
 
 	@Test(priority = 4, enabled = true)
 	public void validateDeleteWaiterData() {
-		splrpg.ClickOnSearchDetails("Shibina");
+		String suplrDlt = excelutil.readStringData("Supplier", 3, 1);
+		splrpg.ClickOnSearchDetails(suplrDlt);
 		splrpg.clickDeleteSuplirDataButton();
-		splrpg.ClickOnSearchDetails("Shibina");
-		Assert.assertEquals(splrpg.getSuplierNameFromSearchResult(), "No matching records found",
+		splrpg.ClickOnSearchDetails(suplrDlt);
+		Assert.assertEquals(splrpg.getSuplierNameFromSearchResult(), AutomationConstants.ErrorMessage,
 				"Failure message : Supplier name not matched");
 	}
 
 	@Test(priority = 3, enabled = true)
 	public void validateEditButtonForWaiter() {
-		splrpg.ClickOnSearchDetails("Miraj");
+		String suplrEdt = excelutil.readStringData("Supplier", 2, 1);
+		String suplrnm = excelutil.readStringData("Supplier", 3, 1);
+		String suplrphone = excelutil.readStringData("Supplier",3, 2);
+		String suplremail = excelutil.readStringData("Supplier", 3, 3);
+		String suplrnote = excelutil.readStringData("Supplier", 3, 4);
+		splrpg.ClickOnSearchDetails(suplrEdt);
 		splrpg.clickEditSuplirDataButton();
-		splrpg.enterSupplierName("Shibina");
-		splrpg.enterSupplierPhone("9857463523");
-		splrpg.enterSupplierMail("shibi@gmail.com");
-		splrpg.enterSupplierNote("WEHDYDGCI");
+		splrpg.enterSupplierName(suplrnm);
+		splrpg.enterSupplierPhone(suplrphone);
+		splrpg.enterSupplierMail(suplremail);
+		splrpg.enterSupplierNote(suplrnote);
 		splrpg.clickEditSubmitBtn();
-		splrpg.ClickOnSearchDetails("Shibina");
-		soft.assertEquals(splrpg.getSuplierNameFromSearchResult(), "Shibina",
+		splrpg.ClickOnSearchDetails(suplrnm);
+		soft.assertEquals(splrpg.getSuplierNameFromSearchResult(), suplrnm,
 				"Failure message : suplier name not matched");
-		soft.assertEquals(splrpg.getSuplierPhoneNumberFromSearchResult(), "9857463523",
+		soft.assertEquals(splrpg.getSuplierPhoneNumberFromSearchResult(), suplrphone,
 				"Failure message : suplier phone not matched");
-		soft.assertEquals(splrpg.getSuplierEmailidFromSearchResult(), "shibi@gmail.com",
+		soft.assertEquals(splrpg.getSuplierEmailidFromSearchResult(), suplremail,
 				"Failure message : suplier mail not matched");
 		soft.assertAll();
 	}
