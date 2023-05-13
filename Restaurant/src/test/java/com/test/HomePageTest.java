@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import com.base.AutomationBase;
+import com.constants.AutomationConstants;
 import com.pages.HomePage;
 import com.pages.LoginPage;
 import com.utilities.BrowserUtils;
@@ -24,11 +25,15 @@ public class HomePageTest extends AutomationBase {
 	Properties prop;
 
 	@BeforeMethod
-	public void preRun() throws IOException {
+	public void preRun() {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		property = new PropertyUtil();
-		prop = property.getAllProperties("config.properties");
+		try {
+			prop = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
+		}
 		homepg = loginpg.login(prop.getProperty("username"), prop.getProperty("password"));
 	}
 

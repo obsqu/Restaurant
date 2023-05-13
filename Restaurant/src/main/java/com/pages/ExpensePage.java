@@ -45,8 +45,6 @@ public class ExpensePage {
 	public WebElement expensecategry_searchresult;
 	@FindBy(xpath = "(//table[@id='table']//tr//td)[5]")
 	public WebElement expenseamount_searchresult;
-	@FindBy(xpath = "(//table[@id='table']//tr//td)[6]")
-	public WebElement expenscreated_searchresult;
 	@FindBy(xpath = "(//a[@class='btn btn-default'])[1]")
 	public WebElement expenseDeleteBtn;
 	@FindBy(xpath = "//button[text()='Yes, delete it!']")
@@ -131,9 +129,6 @@ public class ExpensePage {
 	}
 	public String getExpenseStoreFromSearchResult() {
 		return elementutil.getingtheText(driver, expensestore_searchresult);
-	}
-	public String getExpenseCretatorFromSearchResult() {
-		return elementutil.getingtheText(driver, expenscreated_searchresult);
 	}
 	public void ClickOnExpenseEditButton() {
 		elementutil.clickonTheElement(driver, expenseEditBtn);

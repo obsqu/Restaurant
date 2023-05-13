@@ -8,4 +8,5 @@ public class AutomationConstants {
 	public static final String linkDisplayCheck="Failure Message: Link not displayed";
 	public static final String ErrorMessage="No matching records found";
 	public static final String TEST_DATA_EXCEL="\\src\\test\\resources\\RestaurantDatas.xlsx";
+	public static final String propertyFileCheck="Error during reading property file";
 }

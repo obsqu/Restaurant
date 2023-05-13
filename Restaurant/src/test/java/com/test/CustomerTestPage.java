@@ -18,6 +18,7 @@ import com.pages.HomePage;
 import com.pages.LoginPage;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
+
 public class CustomerTestPage extends AutomationBase {
 
 	WebDriver driver;
@@ -28,17 +29,23 @@ public class CustomerTestPage extends AutomationBase {
 	PropertyUtil property;
 	Properties allProp;
 	ExcelUtils excelutil;
+
 	@BeforeMethod
-	public void preRun() throws IOException {
+	public void preRun() {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		allProp = property.getAllProperties("config.properties");
+		try {
+			allProp = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
+		}
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
-		excelutil= new ExcelUtils();
+		excelutil = new ExcelUtils();
 		custmpg = homepg.navigateToCustomerPage();
 	}
+
 	@Test(priority = 1, enabled = true)
 	public void validateElementsonAddCustomer() {
 		custmpg.ClickOnAddButton();
@@ -50,12 +57,13 @@ public class CustomerTestPage extends AutomationBase {
 		custmpg.clickOnCloseCustomerButton();
 		soft.assertAll();
 	}
-	@Test(priority=2,enabled=true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
-	public void validateAddCustomerDetails() throws Exception {
-		String custmrenm=excelutil.readStringData("Customer",2,1);
-		String custmrphone=excelutil.readStringData("Customer",2,2);
-		String custmremail=excelutil.readStringData("Customer",2,3);
-		String custmrdiscnt=excelutil.readStringData("Customer",2,4);
+
+	@Test(priority = 2, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateAddCustomerDetails() {
+		String custmrenm = excelutil.readStringData("Customer", 2, 1);
+		String custmrphone = excelutil.readStringData("Customer", 2, 2);
+		String custmremail = excelutil.readStringData("Customer", 2, 3);
+		String custmrdiscnt = excelutil.readStringData("Customer", 2, 4);
 		custmpg.ClickOnAddButton();
 		custmpg.clickOnCustomername();
 		custmpg.enterValueForCustomerName(custmrenm);
@@ -70,26 +78,28 @@ public class CustomerTestPage extends AutomationBase {
 				"Failure message : Customer phone not matched");
 		soft.assertEquals(custmpg.getCustomerEmailidFromSearchResult(), custmremail,
 				"Failure message : Customer mail not matched");
-		soft.assertEquals(custmpg.getCustomerDiscountFromSearchResult(),custmrdiscnt,
+		soft.assertEquals(custmpg.getCustomerDiscountFromSearchResult(), custmrdiscnt,
 				"Failure message : Customer discount not matched");
 		soft.assertAll();
 	}
-	@Test(priority=4,enabled=true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
-	public void validateDeleteCustomerData() throws IOException {
-		String custDlt= excelutil.readStringData("Customer",3,1);
+
+	@Test(priority = 4, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateDeleteCustomerData() {
+		String custDlt = excelutil.readStringData("Customer", 3, 1);
 		custmpg.SearchDetails(custDlt);
 		custmpg.clickDeleteCustomerDataButton();
 		custmpg.SearchDetails(custDlt);
-		Assert.assertEquals(custmpg.getCustomerNameFromSearchResult(),AutomationConstants.ErrorMessage,
+		Assert.assertEquals(custmpg.getCustomerNameFromSearchResult(), AutomationConstants.ErrorMessage,
 				"Failure message : custmer name not matched");
 	}
-	@Test(priority=3,enabled=true)
+
+	@Test(priority = 3, enabled = true)
 	public void validateEditButtonForCustomer() {
-		String custEdit=excelutil.readStringData("Customer",2,1);
-		String custmrenm=excelutil.readStringData("Customer",3,1);
-		String custmrphone=excelutil.readStringData("Customer",3,2);
-		String custmremail=excelutil.readStringData("Customer",3,3);
-		String custmrdiscnt=excelutil.readStringData("Customer",3,4);
+		String custEdit = excelutil.readStringData("Customer", 2, 1);
+		String custmrenm = excelutil.readStringData("Customer", 3, 1);
+		String custmrphone = excelutil.readStringData("Customer", 3, 2);
+		String custmremail = excelutil.readStringData("Customer", 3, 3);
+		String custmrdiscnt = excelutil.readStringData("Customer", 3, 4);
 		custmpg.SearchDetails(custEdit);
 		custmpg.clickEditCustomerDataButton();
 		custmpg.enterValueForCustomerName(custmrenm);
@@ -100,7 +110,7 @@ public class CustomerTestPage extends AutomationBase {
 		custmpg.SearchDetails(custmrenm);
 		soft.assertEquals(custmpg.getCustomerNameFromSearchResult(), custmrenm,
 				"Failure message : Customer name not matched");
-		soft.assertEquals(custmpg.getCustomerPhoneNumberFromSearchResult(),custmrphone,
+		soft.assertEquals(custmpg.getCustomerPhoneNumberFromSearchResult(), custmrphone,
 				"Failure message : Customer phone not matched");
 		soft.assertEquals(custmpg.getCustomerEmailidFromSearchResult(), custmremail,
 				"Failure message : Customer mail not matched");

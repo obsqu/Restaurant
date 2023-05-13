@@ -29,18 +29,22 @@ public class ProductPageTest extends AutomationBase {
 	Properties allProp;
 	ExcelUtils excelutil;
 	@BeforeMethod
-	public void preRun() throws IOException {
+	public void preRun()  {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		allProp = property.getAllProperties("config.properties");
+		try {
+			allProp = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
+		}
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		pdtpage = homepg.navigateToPdtPage();
 		excelutil = new ExcelUtils();
 	}
 	@Test(priority = 1, enabled = true)
-	public void validateElementsOnAddProduct() throws Exception {
+	public void validateElementsOnAddProduct() {
 		pdtpage.clickOnAddProductButton();
 		soft.assertTrue(pdtpage.isAddProductDisplayed(), "Failure Message: addProduct is not displayed");
 		pdtpage.WaitProductpage();

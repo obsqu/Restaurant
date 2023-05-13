@@ -34,13 +34,17 @@ public class SupplierTestPage extends AutomationBase {
 	Properties allProp;
 	ExcelUtils excelutil;
 	@BeforeMethod
-	public void preRun() throws IOException {
+	public void preRun() {
 		excelutil = new ExcelUtils();
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		allProp = property.getAllProperties("config.properties");
+		try {
+			allProp = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
+		}
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		splrpg = homepg.navigateToSupplierPage();
 	}
@@ -57,7 +61,7 @@ public class SupplierTestPage extends AutomationBase {
 	}
 
 	@Test(priority = 2, enabled = true)
-	public void validateAddSupplierDetails() throws Exception {
+	public void validateAddSupplierDetails() {
 		String suplrnm = excelutil.readStringData("Supplier", 2, 1);
 		String suplrphone = excelutil.readStringData("Supplier", 2, 2);
 		String suplremail = excelutil.readStringData("Supplier", 2, 3);

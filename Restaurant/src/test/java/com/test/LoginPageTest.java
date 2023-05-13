@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.base.AutomationBase;
+import com.constants.AutomationConstants;
 import com.pages.HomePage;
 import com.pages.LoginPage;
 import com.utilities.BrowserUtils;
@@ -24,8 +25,8 @@ public class LoginPageTest extends AutomationBase {
 	Properties prop;
 	PropertyUtil property;
 
-	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
-	public void validateLogin()  {
+	@Test(priority = 1, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateLogin() {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
@@ -33,11 +34,10 @@ public class LoginPageTest extends AutomationBase {
 		try {
 			prop = property.getAllProperties("config.properties");
 		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
 		}
 		loginpg.performlogin(prop.getProperty("username"), prop.getProperty("password"));
-
 		Assert.assertTrue(homepg.isPosDisplayed(), "Failure : Login failed");
 	}
 
 }
-

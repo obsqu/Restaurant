@@ -10,7 +10,7 @@ public class PropertyUtil {
 	public static final String currentDir = System.getProperty("user.dir");
 	public static String filePath = currentDir + "/src/main/resources/";
 
-	public Properties getAllProperties(String fileName) throws IOException {
+	public Properties getAllProperties(String fileName) throws IOException  {
 		FileInputStream fis = null;
 		Properties prop = null;
 		try {

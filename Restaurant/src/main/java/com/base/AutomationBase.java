@@ -34,7 +34,7 @@ public class AutomationBase {
 		try {
 			allProp = property.getAllProperties("config.properties");
 		} catch (IOException e) {
-			
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
 		}
 		brwsrUtil.launchUrl(driver, allProp.getProperty("url"));
 	}
@@ -58,7 +58,7 @@ public class AutomationBase {
 			driver = new ChromeDriver();
 			brwsrUtil.maximizeWindow(driver);
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw new RuntimeException(AutomationConstants.browserNameCheck);
 		}
 	}
 	private void launchEdgeBrowser() {
@@ -66,7 +66,7 @@ public class AutomationBase {
 			driver = new EdgeDriver();
 			brwsrUtil.maximizeWindow(driver);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException(AutomationConstants.browserNameCheck);
 		}
 	}
 	private void launchFireFoxBrowser() {
@@ -74,7 +74,7 @@ public class AutomationBase {
 			driver = new FirefoxDriver();
 			brwsrUtil.maximizeWindow(driver);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException(AutomationConstants.browserNameCheck);
 		}
 	}
 	public static WebDriver getDriver() {

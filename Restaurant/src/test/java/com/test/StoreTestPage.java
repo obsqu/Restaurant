@@ -28,12 +28,16 @@ public class StoreTestPage extends AutomationBase {
 	Properties allProp;
 	ExcelUtils excelutil;
 	@BeforeMethod
-	public void preRun() throws IOException {
+	public void preRun()  {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		allProp = property.getAllProperties("config.properties");
+		try {
+			allProp = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
+		}
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		storepg = homepg.navigateToStorePage();
 		excelutil= new ExcelUtils();
@@ -53,7 +57,7 @@ public class StoreTestPage extends AutomationBase {
 		soft.assertAll();
 	}
 	@Test(priority = 2, enabled = true)
-	public void validateAddDatasToStore() throws IOException {
+	public void validateAddDatasToStore()  {
 		String storenm=excelutil.readStringData("Stores",2,1);
 		String storemail=excelutil.readStringData("Stores",2,2);
 		String storephone=excelutil.readStringData("Stores",2,3);

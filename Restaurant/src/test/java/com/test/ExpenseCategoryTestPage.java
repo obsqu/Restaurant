@@ -33,12 +33,16 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 	Properties allProp;
 	ExcelUtils excelutil;
 	@BeforeMethod
-	public void preRun() throws IOException {
+	public void preRun() {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		allProp = property.getAllProperties("config.properties");
+		try {
+			allProp = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
+		}
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		expnsctgry = homepg.navigateToExpenseCategoryPage();
 		excelutil = new ExcelUtils();
@@ -52,7 +56,7 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 		expnsctgry.ClickOnCloseButton();
 	}
 	@Test(priority = 2, enabled = true)
-	public void validateAddExpenseCategoryDetails() throws Exception {
+	public void validateAddExpenseCategoryDetails() {
 		expnsctgry.ClickOnAddCategoryButton();
 		expnsctgry.ClickOnCategoryName();
 		String expctgry = excelutil.readStringData("ExpenseCategory", 2, 1);
@@ -63,7 +67,7 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 				"Failure message : category name not matched");
 	}
 	@Test(priority = 3, enabled = true)
-	public void validateEditButtonForCategoryDetails() throws IOException {
+	public void validateEditButtonForCategoryDetails()  {
 		String expctryEdit = excelutil.readStringData("ExpenseCategory", 2, 1);
 		String expctgry = excelutil.readStringData("ExpenseCategory", 3,1);
 		expnsctgry.ClickOnSearchCategoryLink(expctryEdit);

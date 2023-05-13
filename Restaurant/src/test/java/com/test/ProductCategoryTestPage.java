@@ -34,13 +34,17 @@ public class ProductCategoryTestPage extends AutomationBase {
 	ExcelUtils excelutil;
 	Properties allProp;
 	@BeforeMethod
-	public void preRun() throws IOException {
+	public void preRun()  {
 		excelutil = new ExcelUtils();
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		allProp = property.getAllProperties("config.properties");
+		try {
+			allProp = property.getAllProperties("config.properties");
+		} catch (IOException e) {
+			throw new RuntimeException(AutomationConstants.propertyFileCheck);
+		}
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		pdtctgry = homepg.navigateToProductCategoryPage();
 
@@ -53,8 +57,8 @@ public class ProductCategoryTestPage extends AutomationBase {
 		Assert.assertTrue(flagdt, "Fail: CategoryName field is not displayed");
 		pdtctgry.ClickOnCloseButton();
 	}
-	@Test(priority = 2, enabled = true)
-	public void validateAddProductCategoryDetails() throws Exception {
+	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateAddProductCategoryDetails()  {
 		String catgrynm = excelutil.readStringData("ProductCategory", 2, 1);
 		pdtctgry.ClickOnAddCategoryButton();
 		pdtctgry.ClickOnCategoryName();
