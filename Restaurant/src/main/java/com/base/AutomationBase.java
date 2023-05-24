@@ -10,6 +10,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -27,15 +28,11 @@ public class AutomationBase {
 
 	@BeforeTest
 	@Parameters("browserName")
-	public void preLaunch(String browserName)  {
+	public void preLaunch(@Optional("chrome")String browserName)  {
 		launchBrowser(browserName);
 		loginpg = new LoginPage(driver); 
 		property = new PropertyUtil();
-		try {
-			allProp = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
+		allProp = property.getAllProperties("config.properties");
 		brwsrUtil.launchUrl(driver, allProp.getProperty("url"));
 	}
 	public void launchBrowser(String browserName) {

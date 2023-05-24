@@ -36,11 +36,7 @@ public class CustomerTestPage extends AutomationBase {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		try {
-			allProp = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
+		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		excelutil = new ExcelUtils();
 		custmpg = homepg.navigateToCustomerPage();

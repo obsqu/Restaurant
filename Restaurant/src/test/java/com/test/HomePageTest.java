@@ -29,11 +29,6 @@ public class HomePageTest extends AutomationBase {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		property = new PropertyUtil();
-		try {
-			prop = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
 		homepg = loginpg.login(prop.getProperty("username"), prop.getProperty("password"));
 	}
 

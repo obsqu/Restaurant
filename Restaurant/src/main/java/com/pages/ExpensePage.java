@@ -40,11 +40,11 @@ public class ExpensePage {
 	@FindBy(xpath = "(//table[@id='table']//tr//td)[2]")
 	public WebElement expensereferense_searchresult;
 	@FindBy(xpath = "(//table[@id='table']//tr//td)[3]")
-	public WebElement expensestore_searchresult;
+	public WebElement expenseamount_searchresult;
 	@FindBy(xpath = "(//table[@id='table']//tr//td)[4]")
 	public WebElement expensecategry_searchresult;
 	@FindBy(xpath = "(//table[@id='table']//tr//td)[5]")
-	public WebElement expenseamount_searchresult;
+	public WebElement expensestore_searchresult;
 	@FindBy(xpath = "(//a[@class='btn btn-default'])[1]")
 	public WebElement expenseDeleteBtn;
 	@FindBy(xpath = "//button[text()='Yes, delete it!']")
@@ -138,6 +138,8 @@ public class ExpensePage {
 	}
 	public void ClickOnDeleteButton() {
 		elementutil.clickonTheElement(driver, expenseDeleteBtn);
+	}
+	public void YesDeleteButton() {
 		elementutil.clickonTheElement(driver, yesDltBtn);
 		elementutil.clickonTheElement(driver, OkBtn);
 	}

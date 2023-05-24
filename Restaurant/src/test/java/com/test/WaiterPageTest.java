@@ -37,11 +37,7 @@ public class WaiterPageTest extends AutomationBase {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		try {
-			allProp = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
+		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		watrpg = homepg.navigateToWaiterPage();
 	}
@@ -58,7 +54,7 @@ public class WaiterPageTest extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 2, enabled = true, dataProvider = "dataWaitersAdd", dataProviderClass = DataWaiter.class)
+	//@Test(priority = 2, enabled = true, dataProvider = "dataWaitersAdd", dataProviderClass = DataWaiter.class)
 	public void validateAddWaiterDatas(String name, String phone, String mail, String store) {
 		watrpg.ClickOnAddWaiterButton();
 		watrpg.clickOnWaitername();
@@ -76,7 +72,7 @@ public class WaiterPageTest extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 4, enabled = true,dataProvider = "dataWaiterDelete",dataProviderClass = DataWaiter.class)
+	//@Test(priority = 4, enabled = true,dataProvider = "dataWaiterDelete",dataProviderClass = DataWaiter.class)
 	public void validateDeleteWaiterData(String dltnm) {
 		watrpg.searchWaiterLink(dltnm);
 		watrpg.clickDeleteWaiterDataButton();

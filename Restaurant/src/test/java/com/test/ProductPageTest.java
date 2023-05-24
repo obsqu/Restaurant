@@ -34,11 +34,7 @@ public class ProductPageTest extends AutomationBase {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		try {
-			allProp = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
+		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		pdtpage = homepg.navigateToPdtPage();
 		excelutil = new ExcelUtils();
@@ -113,7 +109,7 @@ public class ProductPageTest extends AutomationBase {
 				"Failure Message: Product Description is not matched");
 		soft.assertEquals(pdtpage.getProductTaxFromSearchResults(), pdtTax,
 				"Failure Message: Product Tax is not matched");
-		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "50.000 abc1234569",
+		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "50.000 GzsrK",
 				"Failure Message: Product Price is not matched");
 		soft.assertAll();
 	}
@@ -159,7 +155,7 @@ public class ProductPageTest extends AutomationBase {
 				"Failure Message: Product Description is not matched");
 		soft.assertEquals(pdtpage.getProductTaxFromSearchResults(), pdtTax,
 				"Failure Message: Product Tax is not matched");
-		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "150.000 abc1234569",
+		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "150.000 GzsrK",
 				"Failure Message: Product Price is not matched");
 		soft.assertAll();
 	}

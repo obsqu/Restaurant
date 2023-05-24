@@ -20,6 +20,7 @@ import com.pages.SupplierPage;
 import com.utilities.BrowserUtils;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
+import com.utilities.RandomNumbers;
 import com.utilities.WaitUtils;
 import com.utilities.WebElementUtils;
 
@@ -33,6 +34,7 @@ public class SupplierTestPage extends AutomationBase {
 	PropertyUtil property = new PropertyUtil();
 	Properties allProp;
 	ExcelUtils excelutil;
+	RandomNumbers random = new RandomNumbers();
 	@BeforeMethod
 	public void preRun() {
 		excelutil = new ExcelUtils();
@@ -40,11 +42,7 @@ public class SupplierTestPage extends AutomationBase {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		try {
-			allProp = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
+		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		splrpg = homepg.navigateToSupplierPage();
 	}
@@ -62,10 +60,10 @@ public class SupplierTestPage extends AutomationBase {
 
 	@Test(priority = 2, enabled = true)
 	public void validateAddSupplierDetails() {
-		String suplrnm = excelutil.readStringData("Supplier", 2, 1);
-		String suplrphone = excelutil.readStringData("Supplier", 2, 2);
+		String suplrnm = random.generateAlphabeticData(8);
+		String suplrphone = random.generateNumericData(10);
 		String suplremail = excelutil.readStringData("Supplier", 2, 3);
-		String suplrnote = excelutil.readStringData("Supplier", 2, 4);
+		String suplrnote = random.generateAlphabeticData(15);
 		splrpg.ClickOnAddButton();
 		splrpg.clickOnSupplierName();
 		splrpg.waitSupplier();
@@ -86,7 +84,7 @@ public class SupplierTestPage extends AutomationBase {
 
 	@Test(priority = 4, enabled = true)
 	public void validateDeleteWaiterData() {
-		String suplrDlt = excelutil.readStringData("Supplier", 3, 1);
+		String suplrDlt = excelutil.readStringData("Supplier", 5, 1);
 		splrpg.ClickOnSearchDetails(suplrDlt);
 		splrpg.clickDeleteSuplirDataButton();
 		splrpg.ClickOnSearchDetails(suplrDlt);
@@ -96,11 +94,11 @@ public class SupplierTestPage extends AutomationBase {
 
 	@Test(priority = 3, enabled = true)
 	public void validateEditButtonForWaiter() {
-		String suplrEdt = excelutil.readStringData("Supplier", 2, 1);
-		String suplrnm = excelutil.readStringData("Supplier", 3, 1);
-		String suplrphone = excelutil.readStringData("Supplier",3, 2);
+		String suplrEdt = excelutil.readStringData("Supplier", 4, 1);
+		String suplrnm = random.generateAlphabeticData(8);
+		String suplrphone = random.generateNumericData(10);
 		String suplremail = excelutil.readStringData("Supplier", 3, 3);
-		String suplrnote = excelutil.readStringData("Supplier", 3, 4);
+		String suplrnote = random.generateAlphabeticData(15);
 		splrpg.ClickOnSearchDetails(suplrEdt);
 		splrpg.clickEditSuplirDataButton();
 		splrpg.enterSupplierName(suplrnm);

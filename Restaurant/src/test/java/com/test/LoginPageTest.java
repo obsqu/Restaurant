@@ -30,12 +30,7 @@ public class LoginPageTest extends AutomationBase {
 		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
-		property = new PropertyUtil();
-		try {
-			prop = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
+		prop = property.getAllProperties("config.properties");
 		loginpg.performlogin(prop.getProperty("username"), prop.getProperty("password"));
 		Assert.assertTrue(homepg.isPosDisplayed(), "Failure : Login failed");
 	}

@@ -40,17 +40,20 @@ public class ProductCategoryTestPage extends AutomationBase {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
-		try {
-			allProp = property.getAllProperties("config.properties");
-		} catch (IOException e) {
-			throw new RuntimeException(AutomationConstants.propertyFileCheck);
-		}
+		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		pdtctgry = homepg.navigateToProductCategoryPage();
 
 	}
-	@Test(priority = 1, enabled = true)
+	@Test(priority = 1, enabled = true,groups = {"smokes"})
 	public void ValidateTheMenuItemsDisplayedAddProductPage() {
+		driver = getDriver();
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		pdtctgry = homepg.navigateToProductCategoryPage();
 		pdtctgry.ClickOnAddCategoryButton();
 		pdtctgry.waitForCategory();
 		boolean flagdt = pdtctgry.isCategoryNameDisplayed();
