@@ -134,7 +134,5 @@ public class HomePage {
 		elementutils.clickonTheElement(driver, expnsCatgrylink);
 		return new ExpenseCategoryPage(driver);
 	}
-	public LogOutPage navigateToLogoutPage() {
-		return new LogOutPage(driver);
-	}
+	
 }

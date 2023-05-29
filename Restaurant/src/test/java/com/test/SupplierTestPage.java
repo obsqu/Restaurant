@@ -1,28 +1,19 @@
 package com.test;
 
-import java.io.IOException;
 import java.util.Properties;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.base.AutomationBase;
 import com.constants.AutomationConstants;
-import com.pages.CommonDatas;
 import com.pages.HomePage;
 import com.pages.LoginPage;
-import com.pages.ProductPage;
 import com.pages.SupplierPage;
-import com.utilities.BrowserUtils;
 import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
 import com.utilities.RandomNumbers;
-import com.utilities.WaitUtils;
-import com.utilities.WebElementUtils;
 
 public class SupplierTestPage extends AutomationBase {
 
@@ -34,8 +25,8 @@ public class SupplierTestPage extends AutomationBase {
 	Properties allProp;
 	ExcelUtils excelutil = new ExcelUtils();
 	RandomNumbers random = new RandomNumbers();
-	
-	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+
+	@Test(priority = 1, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateElementsonAddSupplier() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
@@ -53,7 +44,7 @@ public class SupplierTestPage extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	@Test(priority = 2, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddSupplierDetails() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
@@ -83,7 +74,7 @@ public class SupplierTestPage extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 4, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	@Test(priority = 4, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateDeleteSupplierData() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
@@ -99,7 +90,7 @@ public class SupplierTestPage extends AutomationBase {
 				"Failure message : Supplier name not matched");
 	}
 
-	@Test(priority = 3, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	@Test(priority = 3, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateEditButtonForSuppplier() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);

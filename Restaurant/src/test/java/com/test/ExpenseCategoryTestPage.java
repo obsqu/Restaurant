@@ -10,9 +10,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.base.AutomationBase;
-import com.constants.AutomationConstants;
-import com.pages.CommonDatas;
-import com.pages.ExpenseCategoryPage;
+import com.constants.AutomationConstants;import com.pages.ExpenseCategoryPage;
 import com.pages.HomePage;
 import com.pages.LoginPage;
 

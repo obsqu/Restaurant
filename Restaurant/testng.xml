@@ -6,8 +6,8 @@
 	</listeners>
 	<test thread-count="5" name="Test">
 		<parameter name="browserName" value="chrome"></parameter>
-		<classes>
-			<class name="com.test.LoginPageTest" />
+		<!--<classes>
+			 <class name="com.test.LoginPageTest" />
 			<class name="com.test.HomePageTest" />
 			<class name="com.test.ProductPageTest" />
 			<class name="com.test.StoreTestPage" />
@@ -16,7 +16,10 @@
 			<class name="com.test.SupplierTestPage" />
 			<class name="com.test.ProductCategoryTestPage" />
 			<class name="com.test.ExpenseCategoryTestPage" />
-		</classes>
+		</classes>-->
+		<classes>
+			<class name="com.test.LoginPageTest" />
+			<class name="com.test.HomePageTest" /></classes>
 	</test> <!--
 	Test -->
 </suite> <!--

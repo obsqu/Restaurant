@@ -18,22 +18,17 @@ import com.utilities.WebElementUtils;
 
 public class HomePageTest extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	PropertyUtil property;
 	Properties prop;
 
-	@BeforeMethod
-	public void preRun() {
-		driver = getDriver();
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void ValidatetheMenuItemsDisplayedonTheHomePage() {
 		loginpg = new LoginPage(driver);
 		property = new PropertyUtil();
+		prop = property.getAllProperties("config.properties");
 		homepg = loginpg.login(prop.getProperty("username"), prop.getProperty("password"));
-	}
-
-	@Test(priority = 1, enabled = true)
-	public void ValidatetheMenuItemsDisplayedonTheHomePage() {
 		SoftAssert soft = new SoftAssert();
 		boolean flagpos = homepg.isPosDisplayed();
 		soft.assertTrue(flagpos, "Fail: POS Link is not displayed");
