@@ -17,27 +17,22 @@ import com.utilities.ExcelUtils;
 import com.utilities.PropertyUtil;
 public class ExpenseTestPage extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	ExpensePage expnspg;
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property = new PropertyUtil();
 	Properties allProp;
-	ExcelUtils excelutil;
-	@BeforeMethod
-	public void preRun()  {
-		excelutil = new ExcelUtils();
-		driver = getDriver();
+	ExcelUtils excelutil = new ExcelUtils();
+	
+	@Test(priority = 1, enabled = true)
+	public void ValidateTheMenuItemsDisplayedOnAddExpensePage() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
 		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		expnspg = homepg.navigateToExpensesPage();
-	}
-	//@Test(priority = 1, enabled = true)
-	public void ValidateTheMenuItemsDisplayedOnAddExpensePage() {
 		expnspg.ClickOnAddExpenseButton();
 		expnspg.waitForExpense();
 		soft.assertTrue(expnspg.isExpensedateDisplayed(), "Fail: ExpenseDate field is not displayed");
@@ -49,8 +44,14 @@ public class ExpenseTestPage extends AutomationBase {
 		soft.assertAll();
 		expnspg.ClickOnCloseButton();
 	}
-	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	@Test(priority = 2, enabled = true)
 	public void validateAddExpenseDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		expnspg = homepg.navigateToExpensesPage();
 		String expnsDate = excelutil.readStringData("Expense", 2, 1);
 		String expnsRefrnc = excelutil.readStringData("Expense", 2, 2);
 		String expnsCatgry = excelutil.readStringData("Expense", 2, 3);
@@ -79,8 +80,14 @@ public class ExpenseTestPage extends AutomationBase {
 				"Failure message : expense store not matched");
 		soft.assertAll();
 	}
-	//@Test(priority=3,enabled=true)
+	@Test(priority=3,enabled=true)
 	public void validateEditButtonForExpenseDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		expnspg = homepg.navigateToExpensesPage();
 		String expnsEdt = excelutil.readStringData("Expense", 2, 2);
 		String expnsDate = excelutil.readStringData("Expense", 3, 1);
 		String expnsRefrnc = excelutil.readStringData("Expense",3, 2);
@@ -110,9 +117,14 @@ public class ExpenseTestPage extends AutomationBase {
 				"Failure message : expense store not matched");
 		soft.assertAll();
 	}
-	//@Test(priority=4,enabled=true)
+	@Test(priority=4,enabled=true)
 	public void validateDeleteExpenseData() {
-		//String expnsDlt = excelutil.readStringData("Expense", 3, 2);
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		expnspg = homepg.navigateToExpensesPage();
 		expnspg.ClickOnSearchExpenseLink("ambc");
 		expnspg.ClickOnDeleteButton();
 		expnspg.YesDeleteButton();

@@ -1,11 +1,8 @@
 package com.test;
 
-import java.io.IOException;
 import java.util.Properties;
 
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -19,27 +16,22 @@ import com.utilities.PropertyUtil;
 
 public class StoreTestPage extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	StorePage storepg;
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property;
 	Properties allProp;
-	ExcelUtils excelutil;
-	@BeforeMethod
-	public void preRun()  {
-		driver = getDriver();
+	ExcelUtils excelutil= new ExcelUtils();
+	
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateElementsonAddStore() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
 		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		storepg = homepg.navigateToStorePage();
-		excelutil= new ExcelUtils();
-	}
-	@Test(priority = 1, enabled = true)
-	public void validateElementsonAddStore() {
 		storepg.clickOnAddStoreButton();
 		storepg.WaitStoreName();
 		soft.assertTrue(storepg.isStoreNameDisplayed(), "Failure Message: StoreName is not displayed");
@@ -52,8 +44,14 @@ public class StoreTestPage extends AutomationBase {
 		storepg.clickOnCloseStoreButton();
 		soft.assertAll();
 	}
-	@Test(priority = 2, enabled = true)
+	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddDatasToStore()  {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		storepg = homepg.navigateToStorePage();
 		String storenm=excelutil.readStringData("Stores",2,1);
 		String storemail=excelutil.readStringData("Stores",2,2);
 		String storephone=excelutil.readStringData("Stores",2,3);
@@ -83,8 +81,14 @@ public class StoreTestPage extends AutomationBase {
 		soft.assertEquals(storepg.getStoreCityFromSearchResults(), storecity, "Failure Message: Store City is not matched");
 		soft.assertAll();
 	}
-	@Test(priority = 4, enabled = true)
+	@Test(priority = 4, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateDeleteStoreDatas() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		storepg = homepg.navigateToStorePage();
 		String storeDlt=excelutil.readStringData("Stores",3,1);
 		storepg.searchStoreLink(storeDlt);
 		storepg.deleteStoreDetails();
@@ -92,8 +96,14 @@ public class StoreTestPage extends AutomationBase {
 		Assert.assertEquals(storepg.getStoreNameFromSearchResults(), AutomationConstants.ErrorMessage,
 				"Failure Message: Store Name is not matched");
 	}
-	@Test(priority = 3, enabled = true)
+	@Test(priority = 3, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateEditStoreDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		storepg = homepg.navigateToStorePage();
 		String storenmEdt=excelutil.readStringData("Stores",2,1);
 		String storenm=excelutil.readStringData("Stores",3,1);
 		String storemail=excelutil.readStringData("Stores",3,2);

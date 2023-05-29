@@ -24,35 +24,36 @@ import com.utilities.WebElementUtils;
 
 public class ExpenseCategoryTestPage extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	ExpenseCategoryPage expnsctgry;
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property;
 	Properties allProp;
-	ExcelUtils excelutil;
-	@BeforeMethod
-	public void preRun() {
-		driver = getDriver();
+	ExcelUtils excelutil = new ExcelUtils();
+
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void ValidateTheMenuItemsDisplayedAddExpensePage() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
 		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		expnsctgry = homepg.navigateToExpenseCategoryPage();
-		excelutil = new ExcelUtils();
-	}
-	@Test(priority = 1, enabled = true)
-	public void ValidateTheMenuItemsDisplayedAddExpensePage() {
 		expnsctgry.ClickOnAddCategoryButton();
 		expnsctgry.waitForCategory();
 		boolean flagdt = expnsctgry.isCategoryNameDisplayed();
 		Assert.assertTrue(flagdt, "Fail: CategoryName field is not displayed");
 		expnsctgry.ClickOnCloseButton();
 	}
-	@Test(priority = 2, enabled = true)
+	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddExpenseCategoryDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		expnsctgry = homepg.navigateToExpenseCategoryPage();
 		expnsctgry.ClickOnAddCategoryButton();
 		expnsctgry.ClickOnCategoryName();
 		String expctgry = excelutil.readStringData("ExpenseCategory", 2, 1);
@@ -62,8 +63,14 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 		Assert.assertEquals(expnsctgry.getCategryNameFromSearchResult(), expctgry,
 				"Failure message : category name not matched");
 	}
-	@Test(priority = 3, enabled = true)
+	@Test(priority = 3, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateEditButtonForCategoryDetails()  {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		expnsctgry = homepg.navigateToExpenseCategoryPage();
 		String expctryEdit = excelutil.readStringData("ExpenseCategory", 2, 1);
 		String expctgry = excelutil.readStringData("ExpenseCategory", 3,1);
 		expnsctgry.ClickOnSearchCategoryLink(expctryEdit);
@@ -74,8 +81,14 @@ public class ExpenseCategoryTestPage extends AutomationBase {
 		Assert.assertEquals(expnsctgry.getCategryNameFromSearchResult(), expctgry,
 				"Failure message : category name not matched");
 	}
-	@Test(priority = 4, enabled = true)
+	@Test(priority = 4, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateDeleteWaiterData() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		expnsctgry = homepg.navigateToExpenseCategoryPage();
 		String expctgryDlt = excelutil.readStringData("ExpenseCategory", 3,1);
 		expnsctgry.ClickOnSearchCategoryLink(expctgryDlt);
 		expnsctgry.ClickOnDeleteButton();

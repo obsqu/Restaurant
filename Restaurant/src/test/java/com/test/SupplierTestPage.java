@@ -26,28 +26,23 @@ import com.utilities.WebElementUtils;
 
 public class SupplierTestPage extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	SupplierPage splrpg;
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property = new PropertyUtil();
 	Properties allProp;
-	ExcelUtils excelutil;
+	ExcelUtils excelutil = new ExcelUtils();
 	RandomNumbers random = new RandomNumbers();
-	@BeforeMethod
-	public void preRun() {
-		excelutil = new ExcelUtils();
-		driver = getDriver();
+	
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateElementsonAddSupplier() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
 		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		splrpg = homepg.navigateToSupplierPage();
-	}
-	@Test(priority = 1, enabled = true)
-	public void validateElementsonAddSupplier() {
 		splrpg.ClickOnAddButton();
 		splrpg.waitSupplier();
 		soft.assertTrue(splrpg.isSupplierNameDisplayed(), "Failure Message: SupplierName is not displayed");
@@ -58,8 +53,14 @@ public class SupplierTestPage extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 2, enabled = true)
+	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddSupplierDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		splrpg = homepg.navigateToSupplierPage();
 		String suplrnm = random.generateAlphabeticData(8);
 		String suplrphone = random.generateNumericData(10);
 		String suplremail = excelutil.readStringData("Supplier", 2, 3);
@@ -82,8 +83,14 @@ public class SupplierTestPage extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 4, enabled = true)
-	public void validateDeleteWaiterData() {
+	@Test(priority = 4, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateDeleteSupplierData() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		splrpg = homepg.navigateToSupplierPage();
 		String suplrDlt = excelutil.readStringData("Supplier", 5, 1);
 		splrpg.ClickOnSearchDetails(suplrDlt);
 		splrpg.clickDeleteSuplirDataButton();
@@ -92,8 +99,14 @@ public class SupplierTestPage extends AutomationBase {
 				"Failure message : Supplier name not matched");
 	}
 
-	@Test(priority = 3, enabled = true)
-	public void validateEditButtonForWaiter() {
+	@Test(priority = 3, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateEditButtonForSuppplier() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		splrpg = homepg.navigateToSupplierPage();
 		String suplrEdt = excelutil.readStringData("Supplier", 4, 1);
 		String suplrnm = random.generateAlphabeticData(8);
 		String suplrphone = random.generateNumericData(10);

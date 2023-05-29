@@ -19,7 +19,6 @@ import com.utilities.PropertyUtil;
 
 public class ProductPageTest extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	BrowserUtils brwsrUtil = new BrowserUtils();
@@ -27,20 +26,16 @@ public class ProductPageTest extends AutomationBase {
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property;
 	Properties allProp;
-	ExcelUtils excelutil;
-	@BeforeMethod
-	public void preRun()  {
-		driver = getDriver();
+	ExcelUtils excelutil = new ExcelUtils();
+	
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateElementsOnAddProduct() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
 		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		pdtpage = homepg.navigateToPdtPage();
-		excelutil = new ExcelUtils();
-	}
-	@Test(priority = 1, enabled = true)
-	public void validateElementsOnAddProduct() {
 		pdtpage.clickOnAddProductButton();
 		soft.assertTrue(pdtpage.isAddProductDisplayed(), "Failure Message: addProduct is not displayed");
 		pdtpage.WaitProductpage();
@@ -64,6 +59,12 @@ public class ProductPageTest extends AutomationBase {
 	}
 	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddProductDetialsWithStockValue() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		pdtpage = homepg.navigateToPdtPage();
 		pdtpage.clickOnAddProductButton();
 		String pdtType = excelutil.readStringData("Products", 2, 1);
 		String pdtCode = excelutil.readStringData("Products", 2, 2);
@@ -109,13 +110,19 @@ public class ProductPageTest extends AutomationBase {
 				"Failure Message: Product Description is not matched");
 		soft.assertEquals(pdtpage.getProductTaxFromSearchResults(), pdtTax,
 				"Failure Message: Product Tax is not matched");
-		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "50.000 GzsrK",
+		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "50.000 x8fmv",
 				"Failure Message: Product Price is not matched");
 		soft.assertAll();
 	}
 
 	@Test(priority = 3, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void ValidateEditProductDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		pdtpage = homepg.navigateToPdtPage();
 		String pdtCodeEdit = excelutil.readStringData("Products", 2, 2);
 		String pdtType = excelutil.readStringData("Products", 3, 1);
 		String pdtCode = excelutil.readStringData("Products", 3, 2);
@@ -155,13 +162,19 @@ public class ProductPageTest extends AutomationBase {
 				"Failure Message: Product Description is not matched");
 		soft.assertEquals(pdtpage.getProductTaxFromSearchResults(), pdtTax,
 				"Failure Message: Product Tax is not matched");
-		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "150.000 GzsrK",
+		soft.assertEquals(pdtpage.getProductPriceFromSearchResults(), "150.000 x8fmv",
 				"Failure Message: Product Price is not matched");
 		soft.assertAll();
 	}
 
-	@Test(priority = 4, enabled = true)
-	public void validateDeleteProductAction() {
+	@Test(priority = 4, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateDeleteProductDatas() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		pdtpage = homepg.navigateToPdtPage();
 		String pdtCodeDlt = excelutil.readStringData("Products", 3, 2);	
 		pdtpage.ProductSearch(pdtCodeDlt);
 		pdtpage.deleteProductDetails();

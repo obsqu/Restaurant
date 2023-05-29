@@ -23,7 +23,6 @@ import com.utilities.PropertyUtil;
 
 public class WaiterPageTest extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	WaiterPage watrpg;
@@ -31,19 +30,14 @@ public class WaiterPageTest extends AutomationBase {
 	PropertyUtil property = new PropertyUtil();
 	Properties allProp;
 
-	@BeforeMethod
-	public void preRun()  {
-		driver = getDriver();
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateElementsonAddWaiter() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
 		allProp = property.getAllProperties("config.properties");
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		watrpg = homepg.navigateToWaiterPage();
-	}
-
-	@Test(priority = 1, enabled = true)
-	public void validateElementsonAddWaiter() {
 		watrpg.ClickOnAddWaiterButton();
 		watrpg.WaitForWaiter();
 		soft.assertTrue(watrpg.isWaiterNameDisplayed(), "Failure Message: WaiterName is not displayed");
@@ -54,8 +48,14 @@ public class WaiterPageTest extends AutomationBase {
 		soft.assertAll();
 	}
 
-	//@Test(priority = 2, enabled = true, dataProvider = "dataWaitersAdd", dataProviderClass = DataWaiter.class)
+	@Test(priority = 2, enabled = true, dataProvider = "dataWaitersAdd", dataProviderClass = DataWaiter.class,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddWaiterDatas(String name, String phone, String mail, String store) {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		watrpg = homepg.navigateToWaiterPage();
 		watrpg.ClickOnAddWaiterButton();
 		watrpg.clickOnWaitername();
 		watrpg.enterValueForWaiterName(name);
@@ -72,8 +72,14 @@ public class WaiterPageTest extends AutomationBase {
 		soft.assertAll();
 	}
 
-	//@Test(priority = 4, enabled = true,dataProvider = "dataWaiterDelete",dataProviderClass = DataWaiter.class)
+	@Test(priority = 4, enabled = true,dataProvider = "dataWaiterDelete",dataProviderClass = DataWaiter.class,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateDeleteWaiterData(String dltnm) {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		watrpg = homepg.navigateToWaiterPage();
 		watrpg.searchWaiterLink(dltnm);
 		watrpg.clickDeleteWaiterDataButton();
 		watrpg.searchWaiterLink(dltnm);
@@ -81,12 +87,16 @@ public class WaiterPageTest extends AutomationBase {
 				"Failure message : Waiter name not matched");
 	}
 
-	//@Test(priority = 3, enabled = true, dataProvider = "dataWaitersEdit", dataProviderClass = DataWaiter.class)
-	public void validateEditButtonForWaiterDetails(String namEdit, String name, String phone, String mail,
-			String store) {
-		watrpg.searchWaiterLink(namEdit);
+	@Test(priority = 3, enabled = true, dataProvider = "dataWaitersEdit", dataProviderClass = DataWaiter.class,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateEditButtonForWaiterDetails(String name, String phone, String mail,String store) {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		watrpg = homepg.navigateToWaiterPage();
+		watrpg.searchWaiterLink(name);
 		watrpg.clickEditWaiterDataButton();
-		watrpg.enterValueForWaiterName(name);
 		watrpg.enterValueForWaiterPhone(phone);
 		watrpg.enterValueForWaiterEmailId(mail);
 		watrpg.selectValueForWaiterStore(store);

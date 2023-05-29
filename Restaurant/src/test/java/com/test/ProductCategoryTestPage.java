@@ -25,29 +25,16 @@ import com.utilities.WebElementUtils;
 
 public class ProductCategoryTestPage extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	ProductCategoryPage pdtctgry;
 	SoftAssert soft = new SoftAssert();
 	PropertyUtil property = new PropertyUtil();
-	ExcelUtils excelutil;
+	ExcelUtils excelutil = new ExcelUtils();
 	Properties allProp;
-	@BeforeMethod
-	public void preRun()  {
-		excelutil = new ExcelUtils();
-		driver = getDriver();
-		loginpg = new LoginPage(driver);
-		homepg = new HomePage(driver);
-		property = new PropertyUtil();
-		allProp = property.getAllProperties("config.properties");
-		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
-		pdtctgry = homepg.navigateToProductCategoryPage();
-
-	}
-	@Test(priority = 1, enabled = true,groups = {"smokes"})
+	
+	@Test(priority = 1, enabled = true,groups = {"smokes"},retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void ValidateTheMenuItemsDisplayedAddProductPage() {
-		driver = getDriver();
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
@@ -62,6 +49,12 @@ public class ProductCategoryTestPage extends AutomationBase {
 	}
 	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddProductCategoryDetails()  {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		pdtctgry = homepg.navigateToProductCategoryPage();
 		String catgrynm = excelutil.readStringData("ProductCategory", 2, 1);
 		pdtctgry.ClickOnAddCategoryButton();
 		pdtctgry.ClickOnCategoryName();
@@ -71,8 +64,14 @@ public class ProductCategoryTestPage extends AutomationBase {
 		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), catgrynm,
 				"Failure message : category name not matched");
 	}
-	@Test(priority = 3, enabled = true)
+	@Test(priority = 3, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateEditButtonForCategoryDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		pdtctgry = homepg.navigateToProductCategoryPage();
 		String pdtctryEdit = excelutil.readStringData("ProductCategory", 2, 1);
 		String pdtctgrynm = excelutil.readStringData("ProductCategory", 3,1);
 		pdtctgry.ClickOnSearchCategoryLink(pdtctryEdit);
@@ -83,8 +82,14 @@ public class ProductCategoryTestPage extends AutomationBase {
 		Assert.assertEquals(pdtctgry.getCategryNameFromSearchResult(), pdtctgrynm,
 				"Failure message : category name not matched");
 	}
-	@Test(priority = 4, enabled = true)
-	public void validateDeleteWaiterData() {
+	@Test(priority = 4, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateDeleteProductCategoryData() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		pdtctgry = homepg.navigateToProductCategoryPage();
 		String pdtctgryDlt = excelutil.readStringData("ProductCategory", 3,1);
 		pdtctgry.ClickOnSearchCategoryLink(pdtctgryDlt);
 		pdtctgry.ClickOnDeleteButton();

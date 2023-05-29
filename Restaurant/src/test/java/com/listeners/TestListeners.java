@@ -2,6 +2,7 @@ package com.listeners;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Driver;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,7 +32,9 @@ public class TestListeners implements ITestListener {
 	static ExtentTest test;
 	String testName;
 	String reportPath = System.getProperty("user.dir") + "/Reports/";
-
+    AutomationBase base=new AutomationBase();
+    WebDriver driver ;
+    
 	public void onStart(ITestContext context) {
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
 		extent = new ExtentReports();
@@ -45,10 +48,10 @@ public class TestListeners implements ITestListener {
 	public void onTestStart(ITestResult result) {
 		try {
 			Object currentClass = result.getInstance();
-			WebDriver driver = AutomationBase.getDriver();
-			Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
-			extent.setSystemInfo("Browser", cap.getBrowserName());
-			extent.setSystemInfo("BrowserVersion", cap.getBrowserVersion());
+			driver = base.driver;
+//			Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+//			extent.setSystemInfo("Browser", cap.getBrowserName());
+//			extent.setSystemInfo("BrowserVersion", cap.getBrowserVersion());
 			testName = result.getMethod().getMethodName();
 			test = extent.createTest(testName);
 			test.assignCategory(result.getTestClass().getRealClass().getSimpleName());
@@ -65,12 +68,12 @@ public class TestListeners implements ITestListener {
 		test.pass("Test Passed");
 	}
 	public void onTestFailure(ITestResult result) {
+		driver = base.driver;
 		System.out.println(
 				"=============================TEST CASE : " + testName + ":FAILED==============================");
 		test.log(Status.FAIL, MarkupHelper.createLabel(result.getName() + " FAILED!!", ExtentColor.RED));
 		String path = System.getProperty("user.dir") + "/test-output/" + System.currentTimeMillis() + ".png";
-		File scrFile = ((TakesScreenshot) ((AutomationBase) result.getInstance()).getDriver())
-				.getScreenshotAs(OutputType.FILE);
+		File scrFile = ((TakesScreenshot) ( (AutomationBase)result.getInstance()).getDriver()).getScreenshotAs(OutputType.FILE);
 		try {
 			FileUtils.copyFile(scrFile, new File(path));
 		} catch (IOException e) {

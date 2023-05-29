@@ -21,7 +21,6 @@ import com.utilities.PropertyUtil;
 
 public class CustomerTestPage extends AutomationBase {
 
-	WebDriver driver;
 	LoginPage loginpg;
 	HomePage homepg;
 	CustomerPage custmpg;
@@ -30,9 +29,9 @@ public class CustomerTestPage extends AutomationBase {
 	Properties allProp;
 	ExcelUtils excelutil;
 
-	@BeforeMethod
-	public void preRun() {
-		driver = getDriver();
+
+	@Test(priority = 1, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	public void validateElementsonAddCustomer() {
 		loginpg = new LoginPage(driver);
 		homepg = new HomePage(driver);
 		property = new PropertyUtil();
@@ -40,10 +39,6 @@ public class CustomerTestPage extends AutomationBase {
 		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
 		excelutil = new ExcelUtils();
 		custmpg = homepg.navigateToCustomerPage();
-	}
-
-	@Test(priority = 1, enabled = true)
-	public void validateElementsonAddCustomer() {
 		custmpg.ClickOnAddButton();
 		custmpg.WaitCustomer();
 		soft.assertTrue(custmpg.isCustomerNameDisplayed(), "Failure Message: CustomerName is not displayed");
@@ -54,8 +49,15 @@ public class CustomerTestPage extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 2, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	@Test(priority = 2, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateAddCustomerDetails() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		excelutil = new ExcelUtils();
+		custmpg = homepg.navigateToCustomerPage();
 		String custmrenm = excelutil.readStringData("Customer", 2, 1);
 		String custmrphone = excelutil.readStringData("Customer", 2, 2);
 		String custmremail = excelutil.readStringData("Customer", 2, 3);
@@ -79,8 +81,15 @@ public class CustomerTestPage extends AutomationBase {
 		soft.assertAll();
 	}
 
-	@Test(priority = 4, enabled = true, retryAnalyzer = com.analyzer.RetryAnalyzer.class)
+	@Test(priority = 4, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateDeleteCustomerData() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		excelutil = new ExcelUtils();
+		custmpg = homepg.navigateToCustomerPage();
 		String custDlt = excelutil.readStringData("Customer", 3, 1);
 		custmpg.SearchDetails(custDlt);
 		custmpg.clickDeleteCustomerDataButton();
@@ -89,8 +98,15 @@ public class CustomerTestPage extends AutomationBase {
 				"Failure message : custmer name not matched");
 	}
 
-	@Test(priority = 3, enabled = true)
+	@Test(priority = 3, enabled = true,retryAnalyzer = com.analyzer.RetryAnalyzer.class)
 	public void validateEditButtonForCustomer() {
+		loginpg = new LoginPage(driver);
+		homepg = new HomePage(driver);
+		property = new PropertyUtil();
+		allProp = property.getAllProperties("config.properties");
+		loginpg.performlogin(allProp.getProperty("username"), allProp.getProperty("password"));
+		excelutil = new ExcelUtils();
+		custmpg = homepg.navigateToCustomerPage();
 		String custEdit = excelutil.readStringData("Customer", 2, 1);
 		String custmrenm = excelutil.readStringData("Customer", 3, 1);
 		String custmrphone = excelutil.readStringData("Customer", 3, 2);
